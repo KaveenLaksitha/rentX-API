@@ -27,3 +27,7 @@ connection.once("open", () => {
 app.listen(port, () => {
     console.log(`Server Is Running on Port: ${port}`);
 });
+
+//hasani
+const rentalRouter = require("./controller/rentalController.js");
+app.use("/rental", rentalRouter);//table name is created at this point
