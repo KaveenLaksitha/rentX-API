@@ -11,14 +11,12 @@ const rentalSchema = new Schema({
     },
 
     from: {
-        type: Date,
-        format: '%Y-%m-%d',
+        type: String,
         required: true
     },
 
     to: {
-        type: Date,
-        format: '%Y-%m-%d',
+        type: String,
         required: true
     },
 
@@ -27,7 +25,7 @@ const rentalSchema = new Schema({
         required: true,
         enum: ['pending', 'completed'],
         maxlength: 10,
-        maxlength: 7
+        minlength: 7
     },
 
     payment: {
@@ -81,6 +79,7 @@ const rentalSchema = new Schema({
     customerNIC: {
         type: String,
         required: true,
+
     },
 
     customerAdd: {

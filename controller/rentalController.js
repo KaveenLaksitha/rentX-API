@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const moment = require('moment');
 const { v4: uuidv4 } = require("uuid");
 let Rental = require("../model/RentalModel");
 
@@ -7,8 +8,8 @@ let Rental = require("../model/RentalModel");
 router.route("/addRentalRec").post((req, res) => {
 
     const id = uuidv4();
-    const from = req.body.from;
-    const to = req.body.to;
+    const from = moment(req.body.from).format('YYYY-MMMM-DD');
+    const to = moment(req.body.to).format('YYYY-MMMM-DD');
     const status = req.body.status;
     const payment = req.body.payment;
     const vehicleType = req.body.vehicleType;
@@ -173,7 +174,7 @@ router.route("/pendingRentalCount").get((req, res) => {
 })
 
 //this will serach for the list of orders by a particular customer nic given at searchbox
-router.route("/searchRentalRecs/nic").get((req, res) => {
+router.route("/searchRentalRecs/:nic").get((req, res) => {
 
     let val = req.params.nic.trim();
 
@@ -191,6 +192,62 @@ router.route("/searchRentalRecs/nic").get((req, res) => {
 })
 
 
+//to search for an rental record based on status
+router.route("/searchRentalRecordsX/:rVal").get((req, res) => {
+
+    let val = req.params.rVal.trim();
+
+    //{$regex: ".*" + val + ".*"}this will get to the value anywhere in the list not just begining
+    Rental.find({ status: { $regex: ".*" + val + ".*", $options: 'i' } }).then((rentals) => {
+        res.json(rentals)
+
+    }).catch((err) => {
+        console.log(err);
+    })
+
+})
+
+//to search only pending rental record 
+router.route("/searchPendingRentalRecords").get((req, res) => {
+
+    let val = "pending";
+
+    //{$regex: ".*" + val + ".*"}this will get to the value anywhere in the list not just begining
+    Rental.find({ status: { $regex: ".*" + val + ".*", $options: 'i' } }).then((rentals) => {
+        res.json(rentals)
+
+    }).catch((err) => {
+        console.log(err);
+    })
+
+})
+
+router.route("/searchPendingCustomer/:nic").get((req, res) => {
+
+    let val1 = "pending";
+    let val = req.params.nic.trim();
+
+
+    //{$regex: "^" + val + ".*"}this will get to the value starting at the begining of list 
+    Rental.find({ status: { $regex: ".*" + val1 + ".*", $options: 'i' } }).then((rentals) => {
+        //res.json(rentals)
+        if (rentals != null) {
+            Rental.find({ customerNIC: { $regex: "^" + val + ".*", $options: 'i' } }).then((rentals) => {
+                res.json(rentals);
+
+            })
+                .catch((err) => {
+                    console.log(err);
+
+                })
+        }
+
+    }).catch((err) => {
+        console.log(err);
+    })
+
+
+})
 
 
 module.exports = router;
