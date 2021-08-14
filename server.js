@@ -27,3 +27,6 @@ connection.once("open", () => {
 app.listen(port, () => {
     console.log(`Server Is Running on Port: ${port}`);
 });
+
+const reservationController = require("./controller/reservationController.js");
+app.use("/reservations",reservationController);
