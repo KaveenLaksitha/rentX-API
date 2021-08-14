@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const Employee = require("../model/employeeModel")
+const Inquiry = require("../model/inquiryModel")
 const { v4: uuidv4 } = require("uuid");
+const { findOneAndDelete } = require("../model/employeeModel");
 
 router.post("/employee", async (req, res) => {
 
@@ -75,6 +77,52 @@ router.get("/employee", async (req, res) => {
         return { ok: false };
     }
 
+});
+
+//router for delete an employee record
+router.post("/removeEmployee", async (req, res) => {
+    const employeeId = req.body.empId;
+
+    console.log(employeeId, "<<<<<<<<<<<<<<<<deleteeeeeeee");
+
+    if (employeeId) {
+        const response = await Employee.findOneAndDelete({ empId: employeeId }).then(() => {
+            return res.status(200).send({
+                status: response.status ? response.status : "Success",
+            });
+        }).catch((err) => {
+            console.log(err);
+            return res.status(500).send({ status: "Internal Server Error" });
+        })
+    }
+    return res.status(400).send({ status: "Invalid Request" });
+});
+
+//route for add inquiry
+router.post("/inquiry", async (req, res) => {
+    const name = req.body.name;
+    const email = req.body.email;
+    const reason = req.body.reason;
+    const description = req.body.description;
+
+    console.log("request came", req.body);
+
+    const newInquiry = new Inquiry({
+        name,
+        reason,
+        email,
+        description
+    });
+
+    try {
+        let response = await newInquiry.save();
+        if (response)
+            console.log(response);
+        return res.status(201).send({ message: "new Inquiry Added" });
+    } catch (err) {
+        //console.log("error while saving");
+        return res.status(500).send({ status: "Internal Server Error" });
+    }
 });
 
 

@@ -19,7 +19,7 @@ app.use("/api", empRoutes);
 mongoose.connect(URL, {
     useCreateIndex: true,
     useNewUrlParser: true,
-    useUnifiedTopologyL: true,
+    useUnifiedTopology: true,
     useFindandModify: false
 });
 
