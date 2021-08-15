@@ -19,6 +19,10 @@ var reservationSchema = new Schema({
   nic: {
     type: String
   },
+  customernic: {
+    type: String,
+    unique: true
+  },
   customeraddress: {
     type: String,
     required: true

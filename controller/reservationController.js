@@ -11,6 +11,7 @@ controller.route("/addReservation").post((req,res)=>{
     const customername = req.body.customername;
     const contactnumber = Number(req.body.contactnumber);
     const nic = req.body.nic;
+    const customernic = req.body.customernic;
     const customeraddress = req.body.customeraddress;
     const packagename = req.body.packagename;
     const eventtype = req.body.eventtype;
@@ -26,6 +27,7 @@ controller.route("/addReservation").post((req,res)=>{
         customername,
         contactnumber,
         nic,
+        customernic,
         customeraddress,
         packagename,
         eventtype,
@@ -99,10 +101,11 @@ controller.route("/updateReservation/:RID").put(async(req,res) => {
     //we have to fetch the new updating details coming from the front end here-new feature called d structure
 
     const {
-        reservationid,
+        //reservationid,
         customername,
         contactnumber,
         nic,
+        customernic,
         customeraddress,
         packagename,
         eventtype,
@@ -119,6 +122,7 @@ controller.route("/updateReservation/:RID").put(async(req,res) => {
         customername,
         contactnumber,
         nic,
+        customernic,
         customeraddress,
         packagename,
         eventtype,

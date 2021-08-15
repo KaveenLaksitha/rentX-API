@@ -23,6 +23,11 @@ const reservationSchema = new Schema({
         type : String   
     },
 
+    customernic : {
+        type : String,
+        unique : true,
+    },
+
     customeraddress : {
         type : String,
         required : true

@@ -18,6 +18,7 @@ controller.route("/addReservation").post(function (req, res) {
   var customername = req.body.customername;
   var contactnumber = Number(req.body.contactnumber);
   var nic = req.body.nic;
+  var customernic = req.body.customernic;
   var customeraddress = req.body.customeraddress;
   var packagename = req.body.packagename;
   var eventtype = req.body.eventtype;
@@ -32,6 +33,7 @@ controller.route("/addReservation").post(function (req, res) {
     customername: customername,
     contactnumber: contactnumber,
     nic: nic,
+    customernic: customernic,
     customeraddress: customeraddress,
     packagename: packagename,
     eventtype: eventtype,
@@ -145,7 +147,7 @@ controller.route("/deleteReservation/:RID")["delete"](function _callee2(req, res
 }); //to update the reservation details
 
 controller.route("/updateReservation/:RID").put(function _callee3(req, res) {
-  var RID, _req$body, reservationid, customername, contactnumber, nic, customeraddress, packagename, eventtype, from, to, discount, advancedpayment, totalreservation, status, updateReservation, updateReserve;
+  var RID, _req$body, customername, contactnumber, nic, customernic, customeraddress, packagename, eventtype, from, to, discount, advancedpayment, totalreservation, status, updateReservation, updateReserve;
 
   return regeneratorRuntime.async(function _callee3$(_context3) {
     while (1) {
@@ -153,13 +155,14 @@ controller.route("/updateReservation/:RID").put(function _callee3(req, res) {
         case 0:
           RID = req.params.RID; //we have to fetch the new updating details coming from the front end here-new feature called d structure
 
-          _req$body = req.body, reservationid = _req$body.reservationid, customername = _req$body.customername, contactnumber = _req$body.contactnumber, nic = _req$body.nic, customeraddress = _req$body.customeraddress, packagename = _req$body.packagename, eventtype = _req$body.eventtype, from = _req$body.from, to = _req$body.to, discount = _req$body.discount, advancedpayment = _req$body.advancedpayment, totalreservation = _req$body.totalreservation, status = _req$body.status; //we call this as dStructure
+          _req$body = req.body, customername = _req$body.customername, contactnumber = _req$body.contactnumber, nic = _req$body.nic, customernic = _req$body.customernic, customeraddress = _req$body.customeraddress, packagename = _req$body.packagename, eventtype = _req$body.eventtype, from = _req$body.from, to = _req$body.to, discount = _req$body.discount, advancedpayment = _req$body.advancedpayment, totalreservation = _req$body.totalreservation, status = _req$body.status; //we call this as dStructure
 
           updateReservation = {
             //reservationid,
             customername: customername,
             contactnumber: contactnumber,
             nic: nic,
+            customernic: customernic,
             customeraddress: customeraddress,
             packagename: packagename,
             eventtype: eventtype,
