@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const Employee = require("../model/employeeModel")
 const Inquiry = require("../model/inquiryModel")
+const Resignation = require("../model/resignationModel");
 const { v4: uuidv4 } = require("uuid");
-const { findOneAndDelete } = require("../model/employeeModel");
 
 router.post("/employee", async (req, res) => {
 
@@ -66,7 +66,7 @@ router.post("/employee", async (req, res) => {
     }
 });
 
-
+//router for send retrieve and send all the employee records
 router.get("/employee", async (req, res) => {
 
     try {
@@ -87,13 +87,55 @@ router.post("/removeEmployee", async (req, res) => {
 
     if (employeeId) {
         const response = await Employee.findOneAndDelete({ empId: employeeId }).then(() => {
-            return res.status(200).send({
-                status: response.status ? response.status : "Success",
-            });
+            return res.status(200).send({ status: "Success" });
         }).catch((err) => {
             console.log(err);
             return res.status(500).send({ status: "Internal Server Error" });
         })
+    }
+    return res.status(400).send({ status: "Invalid Request" });
+
+});
+
+//router for add resignation
+router.post("/resignation", async (req, res) => {
+
+    const empId = req.body.empId;
+    const fName = req.body.fName;
+    const lName = req.body.lName;
+    const gender = req.body.gender;
+    const DOB = req.body.DOB;
+    const email = req.body.email;
+    const nic = req.body.nic;
+    const designation = req.body.designation;
+    const mobileNo = Number(req.body.mobileNo)
+    const resReason = req.body.reason;
+
+
+    const newResignation = new Resignation({
+        empId,
+        fName,
+        lName,
+        gender,
+        DOB,
+        email,
+        nic,
+        designation,
+        mobileNo,
+        resReason
+    })
+
+    console.log(req.body.reason, "<<<<<<<<<<<<<<<< resignationnn");
+
+    try {
+        let response = await newResignation.save();
+        console.log("doneeeeeeeee>>>>>>>>>>>>", response)
+        if (response)
+            //console.log(doc);
+            return res.status(201).send({ message: "newResignation Added" });
+    } catch (err) {
+        console.log("error while saving");
+        return res.status(500).send({ status: "Internal Server Error" });
     }
     return res.status(400).send({ status: "Invalid Request" });
 });
