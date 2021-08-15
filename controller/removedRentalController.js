@@ -6,39 +6,37 @@ let RemovedRental = require("../model/RemovedRentalModel");
 //To add the deatils for an unique rental record
 router.route("/addRemovedRentalRec").post((req, res) => {
 
-    const id = req.body.id;
-    const from = moment(req.body.from).format('YYYY-MMMM-DD');
-    const to = moment(req.body.to).format('YYYY-MMMM-DD');
-    const status = req.body.status;
-    const payment = req.body.payment;
-    const vehicleType = req.body.vehicleType;
-    const model = req.body.model;
-    const advPayment = Number(req.body.advPayment);
-    const finalPrice = Number(req.body.finalPrice);
-    const customerName = req.body.customerName;
-    const customerNIC = req.body.customerNIC;
-    const contactNo = Number(req.body.contactNo);
-    const penaltyDays = Number(req.body.penaltyDays)
-    const penaltyCharges = Number(req.body.penaltyCharges)
-    const returnDate = moment(req.body.returnDate).format('YYYY-MMMM-DD')
+    console.log("DATAAAAAAAAAAAAAAAAAAAA", req.body.data.id)
+    const id = req.body.data.id;
+    const from = moment(req.body.data.from).format('YYYY-MMMM-DD');
+    const to = moment(req.body.data.to).format('YYYY-MMMM-DD');
+    const returnDate = moment(req.body.data.to).format('YYYY-MMMM-DD');
+    const status = req.body.data.status;
+    const vehicleType = req.body.data.vehicleType;
+    const model = req.body.data.model;
+    const finalPrice = Number(req.body.data.finalPrice);
+    const customerName = req.body.data.customerName;
+    const customerNIC = req.body.data.customerNIC;
+    const contactNo = Number(req.body.data.contactNo);
+    const penaltyCharges = Number(req.body.data.penaltyCharges);
+    const comment = req.body.data.comment;
 
 
     const newRemovedRentalRec = new RemovedRental({
         id,
         from,
         to,
+        returnDate,
         status,
-        payment,
         vehicleType,
         model,
-        advPayment,
         finalPrice,
         customerName,
         customerNIC,
         contactNo,
-        penaltyDays,
         penaltyCharges,
-        returnDate
+        comment
+
     })
 
     newRemovedRentalRec.save().then(() => {//pass the object to database if successful
@@ -52,10 +50,10 @@ router.route("/addRemovedRentalRec").post((req, res) => {
 })
 
 //To retrieve all the rental record details in database
-router.route("/displayRemovedRentalsList").get((req, res) => {
+router.route("/displayRemovedRentals").get((req, res) => {
 
     RemovedRental.find().then((removedRental) => {
-        res.json(rental)
+        res.json(removedRental)
 
     }).catch((err) => {
         console.log(err);

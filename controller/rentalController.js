@@ -111,10 +111,9 @@ router.route("/getRentalRecordByCustomer/:nic").get(async (req, res) => {
 
 
 //To delete a specific rental record from database
-router.route("/deleteRental/:rID").delete(async (req, res) => {
+router.route("/deleteRental").post(async (req, res) => {
 
-    let rID = req.params.rID;//rental id taken from frontend
-
+    let rID = req.body.data.id;//rental id taken from frontend
     await Rental.findOneAndDelete({ id: rID })
         .then(() => {
             res.status(200).send({ status: "Rental Record deleted" });

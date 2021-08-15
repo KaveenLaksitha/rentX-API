@@ -7,7 +7,6 @@ const removedRentalSchema = new Schema({
     id: {
         type: String,
         required: true,
-        unique: true
     },
 
     from: {
@@ -22,41 +21,20 @@ const removedRentalSchema = new Schema({
 
     returnDate: {
         type: String,
-        required: true
+
     },
 
     status: {
         type: String,
-        required: true,
-        enum: ['completed'],
-        maxlength: 10,
-        minlength: 7
     },
 
-    payment: {
-        type: String,
-        required: true,
-        enum: ['cash', 'card'],
-        maxlength: 4,
-        minlength: 4
-    },
 
     vehicleType: {
         type: String,
-        required: true,
-        enum: ['car', 'van', 'bus'],
-        maxlength: 3,
-        minlength: 3
     },
 
     model: {
         type: String,
-        required: true,
-    },
-
-    advPayment: {
-        type: Number,
-        required: true,
     },
 
     finalPrice: {
@@ -76,27 +54,20 @@ const removedRentalSchema = new Schema({
         required: true,
 
     },
-    contactNo: {
-        type: Number,
-        required: true,
-    },
-
-    penaltyDays: {
-        type: Number,
-        required: true,
-    },
-
     penaltyCharges: {
         type: Number,
-        required: true,
-
     },
 
-
+    contactNo: {
+        type: Number,
+    },
+    comment: {
+        type: String,
+    },
 
 
 })
 
-const RemovedRental = mongoose.model("RemovedRental", removedRentalSchema);
+const RemovedRental = mongoose.model("RemoveRental", removedRentalSchema);
 
 module.exports = RemovedRental;
