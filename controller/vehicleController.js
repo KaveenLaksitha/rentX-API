@@ -15,6 +15,7 @@ router.route("/addVehicle").post((req,res)=>{
     const TeleNo = req.body.TeleNo;
     const Address = req.body.Address;
     const  Email = req.body.Email;
+    const  Date = req.body.Date;
     const VehicleRegNo = req.body.VehicleRegNo;
     const VehicleModel = req.body.VehicleModel;
     const VehicleType = req.body.VehicleType;
@@ -38,6 +39,7 @@ router.route("/addVehicle").post((req,res)=>{
         TeleNo,
         Address,
         Email,
+        Date,
         VehicleRegNo,
         VehicleModel,
         VehicleType,
@@ -56,6 +58,7 @@ router.route("/addVehicle").post((req,res)=>{
 
 
     newVehicle.save().then(()=>{
+        console.log(req);
         res.json("Vehicle added");
 
     }).catch((err)=>{

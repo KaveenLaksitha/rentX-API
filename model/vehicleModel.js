@@ -35,7 +35,7 @@ const vehicleSchema = new Schema({
     
 
     Date :{
-        type : Date,
+        type : String,
        
     },
 
