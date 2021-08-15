@@ -28,6 +28,11 @@ connection.once("open", () => {
     console.log("Mongodb Connection success!");
 })
 
+//Vehicle_Routes
+const vehicleRouter = require("./controller/vehicleController.js");
+app.use("/vehicle",vehicleRouter);
+
+
 app.listen(port, () => {
     console.log(`Server Is Running on Port: ${port}`);
 });
