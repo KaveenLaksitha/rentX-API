@@ -23,7 +23,7 @@ const rentalSchema = new Schema({
     status: {
         type: String,
         required: true,
-        enum: ['pending', 'completed'],
+        enum: ['Pending', 'Completed'],
         maxlength: 10,
         minlength: 7
     },
@@ -31,15 +31,15 @@ const rentalSchema = new Schema({
     payment: {
         type: String,
         required: true,
-        enum: ['cash', 'card'],
-        maxlength: 4,
-        minlength: 4
+        enum: ['Cash payment', 'Card payment'],
+        maxlength: 12,
+        minlength: 12
     },
 
     vehicleType: {
         type: String,
         required: true,
-        enum: ['car', 'van', 'bus'],
+        enum: ['Car', 'Van', 'Bus'],
         maxlength: 3,
         minlength: 3
     },
@@ -97,6 +97,22 @@ const rentalSchema = new Schema({
     NICcopy: {
         type: String,
 
+    },
+    penaltyDays: {
+        type: Number,
+
+    },
+
+    penaltyCharges: {
+        type: Number,
+    },
+
+    lastPaidAmount: {
+        type: Number,
+    },
+
+    returnDate: {
+        type: String,
     },
 
 })

@@ -41,6 +41,9 @@ app.listen(port, () => {
 const rentalRouter = require("./controller/rentalController.js");
 app.use("/rental", rentalRouter);//table name is created at this point
 
+const deletedRentalsRouter = require("./controller/removedRentalController.js");
+app.use("/deletedRentals", deletedRentalsRouter);
+
 
 const reservationController = require("./controller/reservationController.js");
 app.use("/reservations", reservationController);

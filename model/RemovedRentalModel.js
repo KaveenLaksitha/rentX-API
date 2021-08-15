@@ -20,10 +20,15 @@ const removedRentalSchema = new Schema({
         required: true
     },
 
+    returnDate: {
+        type: String,
+        required: true
+    },
+
     status: {
         type: String,
         required: true,
-        enum: ['pending', 'completed'],
+        enum: ['completed'],
         maxlength: 10,
         minlength: 7
     },
@@ -49,16 +54,6 @@ const removedRentalSchema = new Schema({
         required: true,
     },
 
-    pickAddress: {
-        type: String,
-        maxlength: 200
-    },
-
-    addPrice: {
-        type: Number,
-
-    },
-
     advPayment: {
         type: Number,
         required: true,
@@ -81,26 +76,27 @@ const removedRentalSchema = new Schema({
         required: true,
 
     },
-
-    customerAdd: {
-        type: String,
-        maxlength: 200
-    },
-
     contactNo: {
         type: Number,
         required: true,
-        maxlength: 10,
-        minlength: 10
     },
 
-    NICcopy: {
-        type: String,
+    penaltyDays: {
+        type: Number,
+        required: true,
+    },
+
+    penaltyCharges: {
+        type: Number,
+        required: true,
 
     },
+
+
+
 
 })
 
-const RemovedRental = mongoose.model("Rental", removedRentalSchema);
+const RemovedRental = mongoose.model("RemovedRental", removedRentalSchema);
 
 module.exports = RemovedRental;

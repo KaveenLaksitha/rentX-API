@@ -131,10 +131,14 @@ router.route("/updateRental/:rID").put(async (req, res) => {
 
     let rID = req.params.rID;//rentalId taken from the frontend
 
-    const { id, from, to, status, payment, vehicleType, model, pickAddress, addPrice, advPayment, finalPrice, customerName, customerNIC, customerAdd, contactNo, NICcopy } = req.body;//we call this as dStructure
+    const { id, from, to, status, payment, vehicleType, model, pickAddress, addPrice, advPayment, finalPrice, customerName, customerNIC, customerAdd, contactNo, NICcopy,
+        penaltyDays,
+        penaltyCharges,
+        lastPaidAmount,
+        returnDate } = req.body;//we call this as dStructure
 
     const updateRental = {//create a object containing the data that needs to be updated
-        rID, from, to, status, payment, vehicleType, model, pickAddress, addPrice, advPayment, finalPrice, customerName, customerNIC, customerAdd, contactNo, NICcopy
+        rID, from, to, status, payment, vehicleType, model, pickAddress, addPrice, advPayment, finalPrice, customerName, customerNIC, customerAdd, contactNo, NICcopy, penaltyDays, penaltyCharges, lastPaidAmount, returnDate
     }
 
     //we have to pass the primary key and then value to be passed
