@@ -10,7 +10,9 @@ var _require = require("uuid"),
 var _require2 = require("express"),
     Router = _require2.Router;
 
-var isMoment = require("moment"); //insert data
+var isMoment = require("moment");
+
+var Vehicles = require("../model/vehicleModel"); //insert data
 
 
 controller.route("/addReservation").post(function (req, res) {
@@ -217,5 +219,18 @@ controller.route("/updateReservation/:RID").put(function _callee3(req, res) {
     })
 })*/
 
+controller.route("/searchVehicleModel/:vType").get(function (req, res) {
+  var val = req.params.vType.trim();
+  Vehicles.find({
+    VehicleID: {
+      $regex: ".*" + val + ".*",
+      $options: 'i'
+    }
+  }).then(function (vehicles) {
+    res.json(vehicles);
+  })["catch"](function (err) {
+    console.log(err);
+  });
+});
 module.exports = controller;
 //# sourceMappingURL=reservationController.dev.js.map

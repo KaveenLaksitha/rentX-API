@@ -4,6 +4,8 @@ const {v4:uuidv4} = require("uuid");
 const { Router } = require("express");
 const isMoment  = require("moment");
 
+let Vehicles = require("../model/vehicleModel");
+
 //insert data
 controller.route("/addReservation").post((req,res)=>{
     
@@ -157,5 +159,20 @@ controller.route("/updateReservation/:RID").put(async(req,res) => {
         console.log(err)
     })
 })*/
+
+
+controller.route("/searchVehicleModel/:vType").get((req,res) => {
+
+    let val =req.params.vType.trim();
+ 
+     Vehicles.find({VehicleID :{$regex: ".*" + val + ".*", $options:'i'}}).then((vehicles) =>{
+         res.json(vehicles)
+ 
+     }).catch((err)=>{
+         console.log(err);
+     })
+ 
+ })
+
 
 module.exports = controller;
