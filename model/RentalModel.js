@@ -111,6 +111,10 @@ const rentalSchema = new Schema({
         type: String,
     },
 
+    lastPaid: {
+        type: Number,
+    },
+
 })
 
 const Rental = mongoose.model("Rental", rentalSchema);

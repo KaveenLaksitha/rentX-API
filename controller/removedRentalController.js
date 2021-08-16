@@ -17,7 +17,6 @@ router.route("/addRemovedRentalRec").post((req, res) => {
     const customerNIC = req.body.data.customerNIC;
     const contactNo = Number(req.body.data.contactNo);
     const penaltyCharges = Number(req.body.data.penalty);
-
     const newRemovedRentalRec = new RemovedRental({
         id,
         from,

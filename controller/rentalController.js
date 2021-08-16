@@ -127,16 +127,18 @@ router.route("/deleteRental").post(async (req, res) => {
 
 //To update the rental record deails
 router.route("/updateRental/:rID").put(async (req, res) => {
-
+    console.log(req.body);
     let rID = req.params.rID;//rentalId taken from the frontend
 
+    const penaltyDays = req.body.penDay;
+    const lastPaid = req.body.rem;
+
     const { id, from, to, status, payment, vehicleType, model, pickAddress, addPrice, advPayment, finalPrice, customerName, customerNIC, customerAdd, contactNo, NICcopy,
-        penaltyDays,
         penaltyCharges,
         returnDate } = req.body;//we call this as dStructure
 
     const updateRental = {
-        rID, from, to, status, payment, vehicleType, model, pickAddress, addPrice, advPayment, finalPrice, customerName, customerNIC, customerAdd, contactNo, NICcopy, penaltyDays, penaltyCharges, returnDate
+        rID, from, to, status, payment, vehicleType, model, pickAddress, addPrice, advPayment, finalPrice, customerName, customerNIC, customerAdd, contactNo, NICcopy, penaltyDays, penaltyCharges, returnDate, lastPaid
     }
 
     const update = await Rental.findOneAndUpdate({ id: rID }, updateRental)
