@@ -5,12 +5,10 @@ let RemovedRental = require("../model/RemovedRentalModel");
 
 //To add the deatils for an unique rental record
 router.route("/addRemovedRentalRec").post((req, res) => {
-
-    console.log("DATAAAAAAAAAAAAAAAAAAAA", req.body.data.id)
     const id = req.body.data.id;
     const from = moment(req.body.data.from).format('YYYY-MMMM-DD');
     const to = moment(req.body.data.to).format('YYYY-MMMM-DD');
-    const returnDate = moment(req.body.data.to).format('YYYY-MMMM-DD');
+    const returnDate = moment(req.body.data.returnDate).format('YYYY-MMMM-DD');
     const status = req.body.data.status;
     const vehicleType = req.body.data.vehicleType;
     const model = req.body.data.model;
@@ -18,9 +16,7 @@ router.route("/addRemovedRentalRec").post((req, res) => {
     const customerName = req.body.data.customerName;
     const customerNIC = req.body.data.customerNIC;
     const contactNo = Number(req.body.data.contactNo);
-    const penaltyCharges = Number(req.body.data.penaltyCharges);
-    const comment = req.body.data.comment;
-
+    const penaltyCharges = Number(req.body.data.penalty);
 
     const newRemovedRentalRec = new RemovedRental({
         id,
@@ -35,7 +31,6 @@ router.route("/addRemovedRentalRec").post((req, res) => {
         customerNIC,
         contactNo,
         penaltyCharges,
-        comment
 
     })
 

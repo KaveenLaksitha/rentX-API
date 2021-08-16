@@ -107,10 +107,6 @@ const rentalSchema = new Schema({
         type: Number,
     },
 
-    lastPaidAmount: {
-        type: Number,
-    },
-
     returnDate: {
         type: String,
     },

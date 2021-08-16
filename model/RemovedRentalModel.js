@@ -26,6 +26,7 @@ const removedRentalSchema = new Schema({
 
     status: {
         type: String,
+        enum: ['completed'],
     },
 
 
@@ -54,15 +55,14 @@ const removedRentalSchema = new Schema({
         required: true,
 
     },
-    penaltyCharges: {
-        type: Number,
-    },
 
     contactNo: {
         type: Number,
     },
-    comment: {
-        type: String,
+
+    penalty: {
+        type: Number,
+
     },
 
 
