@@ -47,3 +47,6 @@ app.use("/deletedRentals", deletedRentalsRouter);
 
 const reservationController = require("./controller/reservationController.js");
 app.use("/reservations", reservationController);
+
+const deletedReservationRouter = require("./controller/removedReservationController.js");
+app.use("/deletedReservations", deletedReservationRouter);

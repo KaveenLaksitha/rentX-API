@@ -115,5 +115,32 @@ router.route("/searchVehicleModels/:vehicle").get(function (req, res) {
     console.log(err);
   });
 });
+router.route("/searchPerDayRentalPrice/:vehicle1/:model1").get(function (req, res) {
+  var val = req.params.vehicle.trim();
+  var val1 = req.params.model.trim(); //{$regex: "^" + val + ".*"}this will get to the value starting at the begining of list 
+
+  Vehicle.find({
+    VehicleType: {
+      $regex: ".*" + val + ".*",
+      $options: 'i'
+    }
+  }).then(function (vehicles) {
+    //res.json(rentals)
+    if (vehicles != null) {
+      Vehicle.findOne({
+        VehicleModel: {
+          $regex: "^" + val1 + ".*",
+          $options: 'i'
+        }
+      }).then(function (vehicles) {
+        res.json(vehicles.RatePDay);
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    }
+  })["catch"](function (err) {
+    console.log(err);
+  });
+});
 module.exports = router;
 //# sourceMappingURL=vehicleController.dev.js.map

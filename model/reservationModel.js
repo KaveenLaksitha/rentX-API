@@ -7,16 +7,20 @@ const reservationSchema = new Schema({
     reservationid : {
         type : String,
         required : true,
+        unique: true
     },
     
     customername : {
         type : String,
-        required : true
+        required : true,
+        maxlength: 100,
     },
 
     contactnumber : {
         type : Number,
         required : true,
+        maxlength : 10 ,
+        minlength : 10
     },
 
     nic : {
@@ -25,12 +29,12 @@ const reservationSchema = new Schema({
 
     customernic : {
         type : String,
-        unique : true,
+        required : true
     },
 
     customeraddress : {
         type : String,
-        required : true
+        maxlength : 200
     },
 
     packagename : {
@@ -69,8 +73,22 @@ const reservationSchema = new Schema({
 
     status : {
         type : String,
+        enum: ['Pending', 'Completed'],
         required : true
-    }
+    },
+
+    penaltyDay: {
+        type: Number,
+
+    },
+
+    penaltyCharge: {
+        type: Number,
+    },
+
+    returnDay: {
+        type: String,
+    },
 })
 
 const reservation = mongoose.model("reservations",reservationSchema);
