@@ -210,7 +210,7 @@ router.route("/searchByFromDate/:rDate").get((req, res) => {
 
     let val = req.params.rDate.trim();
 
-    Rental.find({ from: { $regex: ".*" + val + ".*", $options: 'i' } }).then((rentals) => {
+    Rental.find({ from: { $regex: "^" + val + ".*", $options: 'i' } }).then((rentals) => {
         res.json(rentals)
 
     }).catch((err) => {
