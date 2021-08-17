@@ -66,7 +66,7 @@ router.post("/employee", async (req, res) => {
     }
 });
 
-//router for send retrieve and send all the employee records
+//router for retrieve and send all the employee records
 router.get("/employee", async (req, res) => {
 
     try {
@@ -138,6 +138,19 @@ router.post("/resignation", async (req, res) => {
         return res.status(500).send({ status: "Internal Server Error" });
     }
     return res.status(400).send({ status: "Invalid Request" });
+});
+
+//router for retrieve and send all the past employee records
+router.get("/pastEmployees", async (req, res) => {
+
+    try {
+        const response = await Resignation.find();
+        return res.status(200).send({ status: "Success", data: response });
+    } catch (error) {
+        console.log("Something went wrong while connecting to DB");
+        return { ok: false };
+    }
+
 });
 
 //route for add inquiry
