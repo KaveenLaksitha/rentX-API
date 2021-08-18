@@ -30,12 +30,20 @@ connection.once("open", () => {
 
 //Vehicle_Routes
 const vehicleRouter = require("./controller/vehicleController.js");
-app.use("/vehicle",vehicleRouter);
+app.use("/vehicle", vehicleRouter);
 
 
 app.listen(port, () => {
     console.log(`Server Is Running on Port: ${port}`);
 });
 
+//hasani
+const rentalRouter = require("./controller/rentalController.js");
+app.use("/rental", rentalRouter);//table name is created at this point
+
+const deletedRentalsRouter = require("./controller/removedRentalController.js");
+app.use("/deletedRentals", deletedRentalsRouter);
+
+
 const reservationController = require("./controller/reservationController.js");
-app.use("/reservations",reservationController);
+app.use("/reservations", reservationController);
