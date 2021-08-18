@@ -126,6 +126,33 @@ router.route("/searchVehicleModels/:vehicle").get((req, res) => {
 
 })
 
+router.route("/searchPerDayRentalPrice/:vehicle1/:model1").get((req, res) => {
+
+    let val = req.params.vehicle.trim();
+    let val1 = req.params.model.trim();
+
+
+    //{$regex: "^" + val + ".*"}this will get to the value starting at the begining of list 
+    Vehicle.find({ VehicleType: { $regex: ".*" + val + ".*", $options: 'i' } }).then((vehicles) => {
+        //res.json(rentals)
+        if (vehicles != null) {
+            Vehicle.findOne({ VehicleModel: { $regex: "^" + val1 + ".*", $options: 'i' } }).then((vehicles) => {
+                res.json(vehicles.RatePDay);
+
+            })
+                .catch((err) => {
+                    console.log(err);
+
+                })
+        }
+
+    }).catch((err) => {
+        console.log(err);
+    })
+
+
+})
+
 
 
 //router for delete an Vehicle record
