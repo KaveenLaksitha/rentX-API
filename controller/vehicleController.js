@@ -15,7 +15,8 @@ router.route("/addVehicle").post((req, res) => {
     const OwnerNIC = req.body.OwnerNIC;
     const TeleNo = req.body.TeleNo;
     const Address = req.body.Address;
-    const Email = req.body.Email;
+    const  Email = req.body.Email;
+    const  Date = req.body.Date;
     const VehicleRegNo = req.body.VehicleRegNo;
     const VehicleModel = req.body.VehicleModel;
     const VehicleType = req.body.VehicleType;
@@ -39,6 +40,7 @@ router.route("/addVehicle").post((req, res) => {
         TeleNo,
         Address,
         Email,
+        Date,
         VehicleRegNo,
         VehicleModel,
         VehicleType,
@@ -56,7 +58,8 @@ router.route("/addVehicle").post((req, res) => {
     })
 
 
-    newVehicle.save().then(() => {
+    newVehicle.save().then(()=>{
+        console.log(req);
         res.json("Vehicle added");
 
     }).catch((err) => {
@@ -149,6 +152,26 @@ router.route("/searchPerDayRentalPrice/:vehicle1/:model1").get((req, res) => {
 
 
 })
+
+
+
+//router for delete an Vehicle record
+router.post("/deleteV", async (req, res) => {
+    const VehID = req.body.VehicleID;
+
+    console.log(VehID, "<<<<<<<<<<<<<<<<deleteeeeeeee");
+
+    if (VehID) {
+        const response = await Vehicle.findOneAndDelete({ VehicleID: VehID }).then(() => {
+            return res.status(200).send({ status: "Success" });
+        }).catch((err) => {
+            console.log(err);
+            return res.status(500).send({ status: "Internal Server Error" });
+        })
+    }
+    return res.status(400).send({ status: "Invalid Request" });
+
+});
 
 
 
