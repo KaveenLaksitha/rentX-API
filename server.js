@@ -32,6 +32,9 @@ connection.once("open", () => {
 const vehicleRouter = require("./controller/vehicleController.js");
 app.use("/vehicle", vehicleRouter);
 
+const vehicleRemoveRouter = require("./controller/removeVehicleController.js");
+app.use("/vehicleRemove", vehicleRemoveRouter);
+
 
 app.listen(port, () => {
     console.log(`Server Is Running on Port: ${port}`);

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const vehicleSchema = new Schema({
+const removeVehicleSchema = new Schema({
 
 
     OwnerName : {
@@ -49,7 +49,7 @@ const vehicleSchema = new Schema({
     VehicleRegNo : {
         type : String,
         
-        unique : true
+        
     },
 
 
@@ -127,17 +127,6 @@ const vehicleSchema = new Schema({
 
 })
 
+const RemovedVehicle = mongoose.model("RemoveVehicle",removeVehicleSchema);
 
-// // Getter
-// vehicleSchema.path('RatePDay').get(function(num) {
-//     return (num / 100).toFixed(2);
-//   });
-  
-//   // Setter
-//   vehicleSchema.path('RatePDay').set(function(num) {
-//     return ((num * 100)/100).toFixed(2);
-//   });
-
-const vehicle = mongoose.model("vehicle",vehicleSchema);
-
-module.exports = vehicle;
+module.exports = RemovedVehicle;
