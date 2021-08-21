@@ -111,10 +111,9 @@ router.route("/getRentalRecordByCustomer/:nic").get(async (req, res) => {
 
 
 //To delete a specific rental record from database
-router.route("/deleteRental/:rID").delete(async (req, res) => {
+router.route("/deleteRental").post(async (req, res) => {
 
-    let rID = req.params.rID;//rental id taken from frontend
-
+    let rID = req.body.data.id;//rental id taken from frontend
     await Rental.findOneAndDelete({ id: rID })
         .then(() => {
             res.status(200).send({ status: "Rental Record deleted" });
@@ -128,20 +127,20 @@ router.route("/deleteRental/:rID").delete(async (req, res) => {
 
 //To update the rental record deails
 router.route("/updateRental/:rID").put(async (req, res) => {
-
+    console.log(req.body);
     let rID = req.params.rID;//rentalId taken from the frontend
 
+    const penaltyDays = req.body.penDay;
+    const lastPaid = req.body.rem;
+
     const { id, from, to, status, payment, vehicleType, model, pickAddress, addPrice, advPayment, finalPrice, customerName, customerNIC, customerAdd, contactNo, NICcopy,
-        penaltyDays,
         penaltyCharges,
-        lastPaidAmount,
         returnDate } = req.body;//we call this as dStructure
 
-    const updateRental = {//create a object containing the data that needs to be updated
-        rID, from, to, status, payment, vehicleType, model, pickAddress, addPrice, advPayment, finalPrice, customerName, customerNIC, customerAdd, contactNo, NICcopy, penaltyDays, penaltyCharges, lastPaidAmount, returnDate
+    const updateRental = {
+        rID, from, to, status, payment, vehicleType, model, pickAddress, addPrice, advPayment, finalPrice, customerName, customerNIC, customerAdd, contactNo, NICcopy, penaltyDays, penaltyCharges, returnDate, lastPaid
     }
 
-    //we have to pass the primary key and then value to be passed
     const update = await Rental.findOneAndUpdate({ id: rID }, updateRental)
         .then(() => {
             res.status(200).send({ status: "Rental Record updated" })//sending details of the updated data back to front end
@@ -177,32 +176,54 @@ router.route("/pendingRentalCount").get((req, res) => {
 
 })
 
+/*/**** List of search methods are below*/
+
 //this will serach for the list of orders by a particular customer nic given at searchbox
 router.route("/searchRentalRecs/:nic").get((req, res) => {
 
     let val = req.params.nic.trim();
-
-    //{$regex: "^" + val + ".*"}this will get to the value starting at the begining of list 
     Rental.find({ customerNIC: { $regex: "^" + val + ".*", $options: 'i' } }).then((rentals) => {
         res.json(rentals);
-
     })
         .catch((err) => {
             console.log(err);
-
         })
-
-
 })
 
 
-//to search for an rental record based on status
+//to search for an rental record based on status either pending or completed at search box
 router.route("/searchRentalRecordsX/:rVal").get((req, res) => {
 
     let val = req.params.rVal.trim();
 
-    //{$regex: ".*" + val + ".*"}this will get to the value anywhere in the list not just begining
     Rental.find({ status: { $regex: ".*" + val + ".*", $options: 'i' } }).then((rentals) => {
+        res.json(rentals)
+
+    }).catch((err) => {
+        console.log(err);
+    })
+
+})
+
+//to search for an rental record based on from or to dates at search box
+router.route("/searchByFromDate/:rDate").get((req, res) => {
+
+    let val = req.params.rDate.trim();
+
+    Rental.find({ from: { $regex: "^" + val + ".*", $options: 'i' } }).then((rentals) => {
+        res.json(rentals)
+
+    }).catch((err) => {
+        console.log(err);
+    })
+
+})
+
+router.route("/searchByToDate/:rDate").get((req, res) => {
+
+    let val = req.params.rDate.trim();
+
+    Rental.find({ to: { $regex: ".*" + val + ".*", $options: 'i' } }).then((rentals) => {
         res.json(rentals)
 
     }).catch((err) => {
@@ -216,7 +237,6 @@ router.route("/searchPendingRentalRecords").get((req, res) => {
 
     let val = "pending";
 
-    //{$regex: ".*" + val + ".*"}this will get to the value anywhere in the list not just begining
     Rental.find({ status: { $regex: ".*" + val + ".*", $options: 'i' } }).then((rentals) => {
         res.json(rentals)
 
@@ -231,26 +251,20 @@ router.route("/searchPendingCustomer/:nic").get((req, res) => {
     let val1 = "pending";
     let val = req.params.nic.trim();
 
-
-    //{$regex: "^" + val + ".*"}this will get to the value starting at the begining of list 
     Rental.find({ status: { $regex: ".*" + val1 + ".*", $options: 'i' } }).then((rentals) => {
-        //res.json(rentals)
+
         if (rentals != null) {
             Rental.find({ customerNIC: { $regex: "^" + val + ".*", $options: 'i' } }).then((rentals) => {
                 res.json(rentals);
-
             })
                 .catch((err) => {
                     console.log(err);
-
                 })
         }
 
     }).catch((err) => {
         console.log(err);
     })
-
-
 })
 
 
