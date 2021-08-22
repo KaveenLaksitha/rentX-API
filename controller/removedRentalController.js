@@ -5,6 +5,7 @@ let RemovedRental = require("../model/RemovedRentalModel");
 
 //To add the deatils for an unique rental record
 router.route("/addRemovedRentalRec").post((req, res) => {
+    console.log("Remove record dataaaaaaaaa", req.body);
     const id = req.body.data.id;
     const from = moment(req.body.data.from).format('YYYY-MMMM-DD');
     const to = moment(req.body.data.to).format('YYYY-MMMM-DD');
@@ -16,7 +17,8 @@ router.route("/addRemovedRentalRec").post((req, res) => {
     const customerName = req.body.data.customerName;
     const customerNIC = req.body.data.customerNIC;
     const contactNo = Number(req.body.data.contactNo);
-    const penaltyCharges = Number(req.body.data.penalty);
+    const penaltyCharges = Number(req.body.data.penaltyCharges);
+
     const newRemovedRentalRec = new RemovedRental({
         id,
         from,
@@ -29,7 +31,7 @@ router.route("/addRemovedRentalRec").post((req, res) => {
         customerName,
         customerNIC,
         contactNo,
-        penaltyCharges,
+        penaltyCharges
 
     })
 
@@ -53,5 +55,7 @@ router.route("/displayRemovedRentals").get((req, res) => {
         console.log(err);
     })
 })
+
+
 
 module.exports = router;

@@ -60,7 +60,7 @@ const removedRentalSchema = new Schema({
         type: Number,
     },
 
-    penalty: {
+    penaltyCharges: {
         type: Number,
 
     },
