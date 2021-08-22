@@ -60,12 +60,18 @@ const removedRentalSchema = new Schema({
         type: Number,
     },
 
-    penaltyCharges: {
+    penaltyDays: {
         type: Number,
 
     },
 
+    penaltyCharges: {
+        type: Number,
+    },
 
+    lastPaid: {
+        type: Number,
+    }
 })
 
 const RemovedRental = mongoose.model("RemoveRental", removedRentalSchema);

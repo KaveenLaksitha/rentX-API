@@ -18,6 +18,8 @@ router.route("/addRemovedRentalRec").post((req, res) => {
     const customerNIC = req.body.data.customerNIC;
     const contactNo = Number(req.body.data.contactNo);
     const penaltyCharges = Number(req.body.data.penaltyCharges);
+    const penaltyDay = Number(req.body.data.penDay);
+    const lastPaid = Number(req.body.data.lastPaid);
 
     const newRemovedRentalRec = new RemovedRental({
         id,
@@ -31,7 +33,10 @@ router.route("/addRemovedRentalRec").post((req, res) => {
         customerName,
         customerNIC,
         contactNo,
-        penaltyCharges
+        penaltyCharges,
+        penaltyDay,
+        lastPaid
+
 
     })
 
