@@ -61,6 +61,21 @@ router.route("/displayRemovedRentals").get((req, res) => {
     })
 })
 
+router.route("/VehiclesReturnedToday").get((req, res) => {
+
+    let val = moment('2021-August-26').format('YYYY-MMMM-DD');
+
+    RemovedRental.count({ returnDate: { $regex: "^" + val + ".*" } }).then((rentals) => {
+        res.json(rentals);
+
+    })
+        .catch((err) => {
+            console.log(err);
+
+        })
+
+})
+
 
 
 module.exports = router;
