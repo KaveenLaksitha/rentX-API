@@ -15,8 +15,8 @@ router.route("/addVehicle").post((req, res) => {
     const OwnerNIC = req.body.OwnerNIC;
     const TeleNo = req.body.TeleNo;
     const Address = req.body.Address;
-    const  Email = req.body.Email;
-    const  Date = req.body.Date;
+    const Email = req.body.Email;
+    const Date = req.body.Date;
     const VehicleRegNo = req.body.VehicleRegNo;
     const VehicleModel = req.body.VehicleModel;
     const VehicleType = req.body.VehicleType;
@@ -58,7 +58,7 @@ router.route("/addVehicle").post((req, res) => {
     })
 
 
-    newVehicle.save().then(()=>{
+    newVehicle.save().then(() => {
         console.log(req);
         res.json("Vehicle added");
 

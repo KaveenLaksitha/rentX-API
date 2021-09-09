@@ -152,9 +152,9 @@ router.route("/updateRental/:rID").put(async (req, res) => {
 })
 
 //this route is used to find the last added order details
-router.route("/getLatestRental").get(async (req, res) => {
+router.route("/getLatestRentalsOnly").get(async (req, res) => {
 
-    const rental = await Rental.find().sort({ _id: -1 }).limit(5)
+    const rental = await Rental.find().sort({ _id: -1 }).limit(3)
         .then((rental) => {
             res.status(200).send({ status: "Rental fetched", rental: rental })
         }).catch(() => {
@@ -266,6 +266,32 @@ router.route("/searchPendingCustomer/:nic").get((req, res) => {
         console.log(err);
     })
 })
+
+
+router.route("/VehiclesRentedToday").get((req, res) => {
+
+    let val = moment().format('YYYY-MMMM-DD');
+
+    let status = "Pending"
+
+    Rental.count({ $and: [{ from: { $regex: "^" + val + ".*" }, status: { $regex: "^" + status + ".*" } }] }).then((rentals) => {
+        res.json(rentals);
+
+    })
+        .catch((err) => {
+            console.log(err);
+
+        })
+
+})
+
+
+
+
+
+
+
+
 
 
 module.exports = router;
