@@ -4,6 +4,7 @@ const Inquiry = require("../model/inquiryModel")
 const Resignation = require("../model/resignationModel");
 const { v4: uuidv4 } = require("uuid");
 
+//router for add an employee
 router.post("/employee", async (req, res) => {
 
     const empId = uuidv4();
@@ -88,6 +89,58 @@ router.post("/removeEmployee", async (req, res) => {
     if (employeeId) {
         const response = await Employee.findOneAndDelete({ empId: employeeId }).then(() => {
             return res.status(200).send({ status: "Success" });
+        }).catch((err) => {
+            console.log(err);
+            return res.status(500).send({ status: "Internal Server Error" });
+        })
+    }
+    return res.status(400).send({ status: "Invalid Request" });
+
+});
+
+//router for update an employee record
+router.put("/updateEmployee/:empId", async (req, res) => {
+    const empId = req.params.empId;
+    console.log("employee idd", empId);
+    console.log("payload cameeee", req.body);
+
+    const {
+        fName,
+        lName,
+        email,
+        nic,
+        designation,
+        DOB,
+        gender,
+        maritalStat,
+        currAdd,
+        permAdd,
+        mobileNo,
+        emgContact,
+        empPic,
+        cv
+    } = req.body;
+
+    const employeePayload = {
+        fName,
+        lName,
+        email,
+        nic,
+        designation,
+        DOB,
+        gender,
+        maritalStat,
+        currAdd,
+        permAdd,
+        mobileNo,
+        emgContact,
+        empPic,
+        cv
+    }
+
+    if (empId) {
+        const response = await Employee.findOneAndUpdate({ empId: empId }, employeePayload).then(() => {
+            return res.status(200).send({ status: "Employee Successfully updated!" });
         }).catch((err) => {
             console.log(err);
             return res.status(500).send({ status: "Internal Server Error" });
