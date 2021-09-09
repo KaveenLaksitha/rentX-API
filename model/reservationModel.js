@@ -78,17 +78,17 @@ const reservationSchema = new Schema({
     },
 
     penaltyDay: {
-        type: Number,
+        type: Number
 
     },
 
     penaltyCharge: {
-        type: Number,
+        type: Number
     },
 
     returnDay: {
-        type: String,
-    },
+        type: String
+    }
 })
 
 const reservation = mongoose.model("reservations",reservationSchema);
