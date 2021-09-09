@@ -61,9 +61,10 @@ router.route("/displayRemovedRentals").get((req, res) => {
     })
 })
 
+//to search for the list of returned renting records on the current date
 router.route("/VehiclesReturnedToday").get((req, res) => {
 
-    let val = moment('2021-August-26').format('YYYY-MMMM-DD');
+    let val = moment().format('YYYY-MMMM-DD');
 
     RemovedRental.count({ returnDate: { $regex: "^" + val + ".*" } }).then((rentals) => {
         res.json(rentals);
@@ -75,6 +76,85 @@ router.route("/VehiclesReturnedToday").get((req, res) => {
         })
 
 })
+
+
+/******functions to be used within the report handling*******/
+router.route("/generateReport/:rFrom/:rTo/:rvehicleType/:rCustomerName").get((req, res) => {
+
+    let rFrom = moment(req.params.rFrom.trim()).format('YYYY-MMMM-DD');
+    let rTo = moment(req.params.rTo.trim()).format('YYYY-MMMM-DD');
+    let rvehicleType = req.params.rvehicleType;
+    let rCustomerName = req.params.rCustomerName;
+    let status = "Pending";
+
+    console.log("resuest", req.params);
+
+    if (rCustomerName == "null" && rvehicleType == "null") {
+        Rental.find({
+            $and: [{
+                from: { $regex: "^" + rFrom + ".*" },
+                to: { $regex: "^" + rTo + ".*" },
+                status: { $regex: "^" + status + ".*" },
+            }]
+        })
+            .then((rentals) => {
+                res.json(rentals);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    } else if (rvehicleType == "null") {
+        Rental.find({
+            $and: [{
+                from: { $regex: "^" + rFrom + ".*" },
+                to: { $regex: "^" + rTo + ".*" },
+                customerName: { $regex: ".*" + rCustomerName + ".*" },
+                status: { $regex: "^" + status + ".*" },
+            }]
+        })
+            .then((rentals) => {
+                res.json(rentals);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+
+    } else if (rCustomerName == "null") {
+        Rental.find({
+            $and: [{
+                from: { $regex: "^" + rFrom + ".*" },
+                to: { $regex: "^" + rTo + ".*" },
+                vehicleType: { $regex: "^" + rvehicleType + ".*" },
+                status: { $regex: "^" + status + ".*" },
+            }]
+        })
+            .then((rentals) => {
+                res.json(rentals);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+    else {
+
+        Rental.find({
+            $and: [{
+                from: { $regex: "^" + rFrom + ".*" },
+                to: { $regex: "^" + rTo + ".*" },
+                vehicleType: { $regex: "^" + rvehicleType + ".*" },
+                customerName: { $regex: ".*" + rCustomerName + ".*" },
+                status: { $regex: "^" + status + ".*" },
+            }]
+        })
+            .then((rentals) => {
+                res.json(rentals);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+})
+
 
 
 

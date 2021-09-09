@@ -151,12 +151,13 @@ router.route("/updateRental/:rID").put(async (req, res) => {
 
 })
 
-//this route is used to find the last added order details
+//this route is used to find the latest three rentals
 router.route("/getLatestRentalsOnly").get(async (req, res) => {
 
     const rental = await Rental.find().sort({ _id: -1 }).limit(3)
         .then((rental) => {
-            res.status(200).send({ status: "Rental fetched", rental: rental })
+            //res.status(200).send({ status: "Rental fetched", rental: rental })
+            res.json(rental);
         }).catch(() => {
             console.log(err.message);
             res.status(500).send({ status: "Server error with retrieving Rental Record", error: err.message });
@@ -176,7 +177,7 @@ router.route("/pendingRentalCount").get((req, res) => {
 
 })
 
-/*/**** List of search methods are below*/
+/***** List of search methods are below*/
 
 //this will serach for the list of orders by a particular customer nic given at searchbox
 router.route("/searchRentalRecs/:nic").get((req, res) => {
@@ -246,6 +247,7 @@ router.route("/searchPendingRentalRecords").get((req, res) => {
 
 })
 
+//to search for the list of pending records using customer NIC
 router.route("/searchPendingCustomer/:nic").get((req, res) => {
 
     let val1 = "pending";
@@ -267,7 +269,7 @@ router.route("/searchPendingCustomer/:nic").get((req, res) => {
     })
 })
 
-
+//to search for the list of renting records on the current
 router.route("/VehiclesRentedToday").get((req, res) => {
 
     let val = moment().format('YYYY-MMMM-DD');
@@ -285,8 +287,83 @@ router.route("/VehiclesRentedToday").get((req, res) => {
 
 })
 
+/******functions to be used within the report handling*******/
+router.route("/generateReport/:rFrom/:rTo/:rvehicleType/:rCustomerName").get((req, res) => {
 
+    let rFrom = moment(req.params.rFrom.trim()).format('YYYY-MMMM-DD');
+    let rTo = moment(req.params.rTo.trim()).format('YYYY-MMMM-DD');
+    let rvehicleType = req.params.rvehicleType;
+    let rCustomerName = req.params.rCustomerName;
+    let status = "Pending";
 
+    console.log("resuest", req.params);
+    console.log("dates", rFrom)
+
+    if (rCustomerName == "null" && rvehicleType == "null") {
+        Rental.find({
+            $and: [{
+                from: { $regex: "^" + rFrom + ".*" },
+                to: { $regex: "^" + rTo + ".*" },
+                status: { $regex: "^" + status + ".*" },
+            }]
+        })
+            .then((rentals) => {
+                res.json(rentals);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    } else if (rvehicleType == "null") {
+        Rental.find({
+            $and: [{
+                from: { $regex: "^" + rFrom + ".*" },
+                to: { $regex: "^" + rTo + ".*" },
+                customerName: { $regex: ".*" + rCustomerName + ".*" },
+                status: { $regex: "^" + status + ".*" },
+            }]
+        })
+            .then((rentals) => {
+                res.json(rentals);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+
+    } else if (rCustomerName == "null") {
+        Rental.find({
+            $and: [{
+                from: { $regex: "^" + rFrom + ".*" },
+                to: { $regex: "^" + rTo + ".*" },
+                vehicleType: { $regex: "^" + rvehicleType + ".*" },
+                status: { $regex: "^" + status + ".*" },
+            }]
+        })
+            .then((rentals) => {
+                res.json(rentals);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+    else {
+
+        Rental.find({
+            $and: [{
+                from: { $regex: "^" + rFrom + ".*" },
+                to: { $regex: "^" + rTo + ".*" },
+                vehicleType: { $regex: "^" + rvehicleType + ".*" },
+                customerName: { $regex: ".*" + rCustomerName + ".*" },
+                status: { $regex: "^" + status + ".*" },
+            }]
+        })
+            .then((rentals) => {
+                res.json(rentals);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+})
 
 
 
