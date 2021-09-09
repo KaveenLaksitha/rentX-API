@@ -88,7 +88,7 @@ controller.route("/getReservation/:RID").get(async(req,res) => {
 controller.route("/deleteReservation").post(async(req,res)=>{
     let RID = req.body.reservationid; //Reservation ID taken from frontend
 
-    console.log("reservation id", RID)
+    //console.log("reservation id", RID)
 
     await Reservation.findOneAndDelete({reservationid : RID})
     .then(()=> {
@@ -100,9 +100,11 @@ controller.route("/deleteReservation").post(async(req,res)=>{
 })
 
 //to update the reservation details
-controller.route("/updateReservation/:RID").put(async(req,res) => {
-    let RID = req.params.RID;
 
+controller.route("/updateReservation/:RID").put(async(req,res) => {
+    console.log(req.body);
+    let RID = req.params.RID;
+    
     //we have to fetch the new updating details coming from the front end here-new feature called d structure
 
     const {
