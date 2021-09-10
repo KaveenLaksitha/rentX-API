@@ -85,12 +85,12 @@ router.route("/generateReport/:rFrom/:rTo/:rvehicleType/:rCustomerName").get((re
     let rTo = moment(req.params.rTo.trim()).format('YYYY-MMMM-DD');
     let rvehicleType = req.params.rvehicleType;
     let rCustomerName = req.params.rCustomerName;
-    let status = "Pending";
+    let status = "Completed";
 
-    console.log("resuest", req.params);
+    console.log("request", req.params);
 
-    if (rCustomerName == "null" && rvehicleType == "null") {
-        Rental.find({
+    if (rCustomerName == "null" && rvehicleType == "null") {//incase if the vehicle type and customer name is not available
+        RemovedRental.find({
             $and: [{
                 from: { $regex: "^" + rFrom + ".*" },
                 to: { $regex: "^" + rTo + ".*" },
@@ -103,8 +103,8 @@ router.route("/generateReport/:rFrom/:rTo/:rvehicleType/:rCustomerName").get((re
             .catch((err) => {
                 console.log(err);
             })
-    } else if (rvehicleType == "null") {
-        Rental.find({
+    } else if (rvehicleType == "null") {//incase if the vehicle type is not available
+        RemovedRental.find({
             $and: [{
                 from: { $regex: "^" + rFrom + ".*" },
                 to: { $regex: "^" + rTo + ".*" },
@@ -119,8 +119,8 @@ router.route("/generateReport/:rFrom/:rTo/:rvehicleType/:rCustomerName").get((re
                 console.log(err);
             })
 
-    } else if (rCustomerName == "null") {
-        Rental.find({
+    } else if (rCustomerName == "null") {//incase if the  customer name is not available
+        RemovedRental.find({
             $and: [{
                 from: { $regex: "^" + rFrom + ".*" },
                 to: { $regex: "^" + rTo + ".*" },
@@ -137,7 +137,7 @@ router.route("/generateReport/:rFrom/:rTo/:rvehicleType/:rCustomerName").get((re
     }
     else {
 
-        Rental.find({
+        RemovedRental.find({
             $and: [{
                 from: { $regex: "^" + rFrom + ".*" },
                 to: { $regex: "^" + rTo + ".*" },
@@ -154,6 +154,8 @@ router.route("/generateReport/:rFrom/:rTo/:rvehicleType/:rCustomerName").get((re
             })
     }
 })
+
+
 
 
 
