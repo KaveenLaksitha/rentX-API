@@ -64,6 +64,7 @@ router.route("/addVehicle").post((req, res) => {
 
     }).catch((err) => {
         console.log(err);
+        return res.status(400).send({ status: "Vehicle already exist!" });
     })
 
 })
