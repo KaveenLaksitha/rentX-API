@@ -150,6 +150,55 @@ router.put("/updateEmployee/:empId", async (req, res) => {
 
 });
 
+//router for search employee records
+router.get("/searchEmployees/:input", async (req, res) => {
+
+    const input = req.params.input;
+
+    if (req.query.type == "pastEmp") {
+        if (!isNaN(input)) {
+            try {
+                const response = await Resignation.find({ nic: { $regex: '.*' + input.trim() + '.*', $options: 'i' } });
+                console.log("search results", response);
+                return res.status(200).send({ status: "Success", data: response });
+            } catch (error) {
+                console.log("Something went wrong while connecting to DB");
+                return { ok: false };
+            }
+        }
+        try {
+            const response = await Resignation.find({ fName: { $regex: '.*' + input + '.*', $options: 'i' } });
+            console.log("search results", response);
+            return res.status(200).send({ status: "Success", data: response });
+        } catch (error) {
+            console.log("Something went wrong while connecting to DB");
+            return { ok: false };
+        }
+    }
+
+
+    if (!isNaN(input)) {
+        //     console.log
+        try {
+            const response = await Employee.find({ nic: { $regex: '.*' + input.trim() + '.*', $options: 'i' } });
+            console.log("search results", response);
+            return res.status(200).send({ status: "Success", data: response });
+        } catch (error) {
+            console.log("Something went wrong while connecting to DB");
+            return { ok: false };
+        }
+    }
+    try {
+        const response = await Employee.find({ fName: { $regex: '.*' + input + '.*', $options: 'i' } });
+        console.log("search results", response);
+        return res.status(200).send({ status: "Success", data: response });
+    } catch (error) {
+        console.log("Something went wrong while connecting to DB");
+        return { ok: false };
+    }
+
+});
+
 //router for add resignation
 router.post("/resignation", async (req, res) => {
 
@@ -184,7 +233,6 @@ router.post("/resignation", async (req, res) => {
         let response = await newResignation.save();
         console.log("doneeeeeeeee>>>>>>>>>>>>", response)
         if (response)
-            //console.log(doc);
             return res.status(201).send({ message: "newResignation Added" });
     } catch (err) {
         console.log("error while saving");
@@ -228,7 +276,6 @@ router.post("/inquiry", async (req, res) => {
             console.log(response);
         return res.status(201).send({ message: "new Inquiry Added" });
     } catch (err) {
-        //console.log("error while saving");
         return res.status(500).send({ status: "Internal Server Error" });
     }
 });
