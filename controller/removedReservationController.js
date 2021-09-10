@@ -5,7 +5,7 @@ let RemovedReservation = require("../model/RemovedReservationModel");
 
 //insert data
 controller.route("/addRemovedReservation").post((req,res)=>{
-    console.log("hi",req.body.data);
+    //console.log("hi",req.body.data);
     const reservationid =  req.body.data.reservationid;
     const customername = req.body.data.customername;
     const contactnumber = Number(req.body.data.contactnumber);
@@ -21,7 +21,7 @@ controller.route("/addRemovedReservation").post((req,res)=>{
     const status = req.body.data.status;
     const penaltyDay = Number(req.body.data.penaltyDay);
     const penaltyCharge = Number(req.body.data.penaltyCharge);
-    const returnDay = isMoment(req.body.data.from).format('YYYY-MMMM-DD');
+    const returnDay = isMoment(req.body.data.returnDay).format('YYYY-MMMM-DD');
 
     const newRemovedReservationRecords = new RemovedReservation({
         reservationid,
@@ -43,7 +43,7 @@ controller.route("/addRemovedReservation").post((req,res)=>{
 
     })
 
-    console.log("dataaaaaaaaa",newRemovedReservationRecords)
+    //console.log("dataaaaaaaaa",newRemovedReservationRecords)
 
     newRemovedReservationRecords.save().then(()=>{
         console.log("data saved")
@@ -58,11 +58,12 @@ controller.route("/addRemovedReservation").post((req,res)=>{
 //retrieve all order details
 controller.route("/displayRemovedReservation").get((req,res) =>{
     RemovedReservation.find().then((removedReservation) => {
-        res.json(reservations)
+        res.json(removedReservation)
     }).catch((err)=>{
         console.log(err);
     })
 })
+
 
 module.exports = controller;
 
