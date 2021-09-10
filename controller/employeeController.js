@@ -280,6 +280,19 @@ router.post("/inquiry", async (req, res) => {
     }
 });
 
+//to search for the list of renting records on the current
+router.route("/EmployeeAvailable").get((req, res) => {
 
+
+    Employee.count().then((employee) => {
+        res.json(employee);
+
+    })
+        .catch((err) => {
+            console.log(err);
+
+    })
+
+})
 
 module.exports = router;
