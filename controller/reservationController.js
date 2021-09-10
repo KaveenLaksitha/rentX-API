@@ -96,8 +96,10 @@ controller.route("/deleteReservation").post(async(req,res)=>{
 //to update the reservation details
 
 controller.route("/updateReservation/:RID").put(async(req,res) => {
-    console.log(req.body);
+    //console.log(req.body);
     let RID = req.params.RID;
+
+    //const penaltyDay = req.body.penaltyDay;
     
     //we have to fetch the new updating details coming from the front end here-new feature called d structure
 
@@ -240,11 +242,7 @@ controller.route("/VehiclesReservationToday").get((req, res) => {
     })
         .catch((err) => {
             console.log(err);
-
         })
-
 })
-
-
 
 module.exports = controller;
