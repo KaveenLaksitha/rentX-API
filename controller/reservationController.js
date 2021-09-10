@@ -21,9 +21,6 @@ controller.route("/addReservation").post((req,res)=>{
     const advancedpayment = Number(req.body.advancedpayment);
     const totalreservation = Number(req.body.totalreservation);
     const status = req.body.status;
-    //const penaltyDay = Number(req.body.penaltyDay);
-    //const penaltyCharge = Number(req.body.penaltyCharge);
-    //const returnDay = isMoment(req.body.from).format('MM-DD-YYYY');
 
     const newReservation = new Reservation({
         reservationid,
@@ -40,9 +37,6 @@ controller.route("/addReservation").post((req,res)=>{
         advancedpayment,
         totalreservation,
         status
-        //penaltyDay,
-        //penaltyCharge,
-        //returnDay
 
     })
 
@@ -159,6 +153,19 @@ controller.route("/updateReservation/:RID").put(async(req,res) => {
     })
 })
 
+//this route is used to find the latest three rentals
+controller.route("/getLatestReservationOnly").get(async (req, res) => {
+
+    const reservation = await Reservation.find().sort({ _id: -1 }).limit(3)
+        .then((reservation) => {
+            //res.status(200).send({ status: "Rental fetched", rental: rental })
+            res.json(reservation);
+        }).catch(() => {
+            console.log(err.message);
+            res.status(500).send({ status: "Server error with retrieving Reservation Record", error: err.message });
+        })
+
+})
 
 //To get the count of the pending records
 controller.route("/pendingReservationCount").get((req, res) => {
@@ -219,6 +226,25 @@ controller.route("/searchPendingReservationRecords").get((req, res) => {
     })
 
 })
+
+//to search for the list of renting records on the current
+controller.route("/VehiclesReservationToday").get((req, res) => {
+
+    let val = isMoment().format('YYYY-MMMM-DD');
+
+    let status = "Pending"
+
+    Reservation.count({ $and: [{ from: { $regex: "^" + val + ".*" }, status: { $regex: "^" + status + ".*" } }] }).then((reservation) => {
+        res.json(reservation);
+
+    })
+        .catch((err) => {
+            console.log(err);
+
+        })
+
+})
+
 
 
 module.exports = controller;

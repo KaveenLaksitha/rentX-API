@@ -64,6 +64,21 @@ controller.route("/displayRemovedReservation").get((req,res) =>{
     })
 })
 
+controller.route("/VehiclesReservationToday").get((req, res) => {
+
+    let val = isMoment().format('YYYY-MMMM-DD');
+
+    RemovedReservation.count({ returnDay: { $regex: "^" + val + ".*" } }).then((removedReservation) => {
+        res.json(removedReservation);
+
+    })
+        .catch((err) => {
+            console.log(err);
+
+        })
+
+})
+
 
 module.exports = controller;
 

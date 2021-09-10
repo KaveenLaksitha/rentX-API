@@ -147,7 +147,26 @@ router.post("/deleteV", async (req, res) => {
 });
 
 
+//to search for the list of renting records on the current
+router.route("/VehiclesAvailable").get((req, res) => {
 
+    //let val = isMoment().format('YYYY-MMMM-DD');
+
+    let car = "Car"
+    let van = "Van"
+    let bus = "Bus"
+
+    Vehicle.count({ VehicleType: { $regex: "^" + car + ".*" } } + { VehicleType: { $regex: "^" + van + ".*" } } + { VehicleType: { $regex: "^" + bus + ".*" } }).then((vehicle) => {
+        res.json(vehicle);
+
+    })
+        .catch((err) => {
+            console.log(err);
+
+    })
+
+})
+//To get the count of the pending records
 
 
 
