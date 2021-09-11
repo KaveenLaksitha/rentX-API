@@ -22,6 +22,7 @@ router.route("/addRemoveVehicle").post((req, res) => {
     const Mileage = req.body.data.Mileage;
     const InsType = req.body.data.InsType;
     const InsComName = req.body.data.InsComName;
+    const RatePDay = req.body.data.RatePDay;
     const YearsRent = req.body.data.YearsRent;
  
 
@@ -41,7 +42,8 @@ router.route("/addRemoveVehicle").post((req, res) => {
         Mileage,
         InsType,
         InsComName,
-        YearsRent,
+        RatePDay,
+        YearsRent
 
     })
 
