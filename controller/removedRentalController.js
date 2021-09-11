@@ -92,8 +92,8 @@ router.route("/generateReport/:rFrom/:rTo/:rvehicleType/:rCustomerName").get((re
     if (rCustomerName == "null" && rvehicleType == "null") {//incase if the vehicle type and customer name is not available
         RemovedRental.find({
             $and: [{
-                from: { $regex: "^" + rFrom + ".*" },
-                to: { $regex: "^" + rTo + ".*" },
+                from: { $gte: rFrom },
+                to: { $lte: rTo },
                 status: { $regex: "^" + status + ".*" },
             }]
         })
@@ -106,8 +106,8 @@ router.route("/generateReport/:rFrom/:rTo/:rvehicleType/:rCustomerName").get((re
     } else if (rvehicleType == "null") {//incase if the vehicle type is not available
         RemovedRental.find({
             $and: [{
-                from: { $regex: "^" + rFrom + ".*" },
-                to: { $regex: "^" + rTo + ".*" },
+                from: { $gte: rFrom },
+                to: { $lte: rTo },
                 customerName: { $regex: ".*" + rCustomerName + ".*" },
                 status: { $regex: "^" + status + ".*" },
             }]
@@ -122,8 +122,8 @@ router.route("/generateReport/:rFrom/:rTo/:rvehicleType/:rCustomerName").get((re
     } else if (rCustomerName == "null") {//incase if the  customer name is not available
         RemovedRental.find({
             $and: [{
-                from: { $regex: "^" + rFrom + ".*" },
-                to: { $regex: "^" + rTo + ".*" },
+                from: { $gte: rFrom },
+                to: { $lte: rTo },
                 vehicleType: { $regex: "^" + rvehicleType + ".*" },
                 status: { $regex: "^" + status + ".*" },
             }]
@@ -139,8 +139,8 @@ router.route("/generateReport/:rFrom/:rTo/:rvehicleType/:rCustomerName").get((re
 
         RemovedRental.find({
             $and: [{
-                from: { $regex: "^" + rFrom + ".*" },
-                to: { $regex: "^" + rTo + ".*" },
+                from: { $gte: rFrom },
+                to: { $lte: rTo },
                 vehicleType: { $regex: "^" + rvehicleType + ".*" },
                 customerName: { $regex: ".*" + rCustomerName + ".*" },
                 status: { $regex: "^" + status + ".*" },

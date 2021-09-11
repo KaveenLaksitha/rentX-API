@@ -163,7 +163,7 @@ router.route("/VehiclesAvailable").get((req, res) => {
         .catch((err) => {
             console.log(err);
 
-    })
+        })
 
 })
 //To get the count of the pending records
