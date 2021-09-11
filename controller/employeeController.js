@@ -1,8 +1,9 @@
 const router = require("express").Router();
 const Employee = require("../model/employeeModel")
-const Inquiry = require("../model/inquiryModel")
 const Resignation = require("../model/resignationModel");
 const { v4: uuidv4 } = require("uuid");
+const moment = require('moment');
+
 
 //router for add an employee
 router.post("/employee", async (req, res) => {
@@ -254,32 +255,6 @@ router.get("/pastEmployees", async (req, res) => {
 
 });
 
-//route for add inquiry
-router.post("/inquiry", async (req, res) => {
-    const name = req.body.name;
-    const email = req.body.email;
-    const reason = req.body.reason;
-    const description = req.body.description;
-
-    console.log("request came", req.body);
-
-    const newInquiry = new Inquiry({
-        name,
-        reason,
-        email,
-        description
-    });
-
-    try {
-        let response = await newInquiry.save();
-        if (response)
-            console.log(response);
-        return res.status(201).send({ message: "new Inquiry Added" });
-    } catch (err) {
-        return res.status(500).send({ status: "Internal Server Error" });
-    }
-});
-
 //to search for the list of renting records on the current
 router.route("/EmployeeAvailable").get((req, res) => {
 
@@ -291,8 +266,50 @@ router.route("/EmployeeAvailable").get((req, res) => {
         .catch((err) => {
             console.log(err);
 
-    })
+        })
 
 })
+
+//router for retrieve and send all the employee records for report
+router.get("/employeeReport/:designation/:ageFrom/:ageTo/:gender", async (req, res) => {
+
+    const designation = req.params.designation;
+    const ageFrom = req.params.ageFrom;
+    const ageTo = req.params.ageTo;
+    const gender = req.params.gender;
+
+    const fromYear = calculate_age(ageFrom);
+    const toYear = calculate_age(ageTo);
+
+    function calculate_age(age) {
+        const dayMilliSeconds = age * 365 * 3600 * 24 * 1000;
+        var dob = Date.now() - dayMilliSeconds;
+        console.log("epoch time", dob)
+        console.log(new Date(dob))
+        return dob;
+    }
+
+    try {
+        const response = await Employee.find(
+            {
+                $and: [{
+                    designation: { $regex: "^" + designation + ".*", $options: 'i' },
+                    DOB: {
+                        $gte: fromYear, $lte: toYear
+                    },
+                    gender: { $regex: "^" + gender + ".*", $options: 'i' },
+                }]
+            }
+        );
+        if (response.length == 0) {
+            throw new Error;
+        }
+        return res.status(200).send({ status: "Success", data: response });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({ ok: false });
+    }
+
+});
 
 module.exports = router;
