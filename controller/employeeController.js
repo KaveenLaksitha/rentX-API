@@ -4,6 +4,7 @@ const Inquiry = require("../model/inquiryModel")
 const Resignation = require("../model/resignationModel");
 const { v4: uuidv4 } = require("uuid");
 
+//router for add an employee
 router.post("/employee", async (req, res) => {
 
     const empId = uuidv4();
@@ -97,6 +98,107 @@ router.post("/removeEmployee", async (req, res) => {
 
 });
 
+//router for update an employee record
+router.put("/updateEmployee/:empId", async (req, res) => {
+    const empId = req.params.empId;
+    console.log("employee idd", empId);
+    console.log("payload cameeee", req.body);
+
+    const {
+        fName,
+        lName,
+        email,
+        nic,
+        designation,
+        DOB,
+        gender,
+        maritalStat,
+        currAdd,
+        permAdd,
+        mobileNo,
+        emgContact,
+        empPic,
+        cv
+    } = req.body;
+
+    const employeePayload = {
+        fName,
+        lName,
+        email,
+        nic,
+        designation,
+        DOB,
+        gender,
+        maritalStat,
+        currAdd,
+        permAdd,
+        mobileNo,
+        emgContact,
+        empPic,
+        cv
+    }
+
+    if (empId) {
+        const response = await Employee.findOneAndUpdate({ empId: empId }, employeePayload).then(() => {
+            return res.status(200).send({ status: "Employee Successfully updated!" });
+        }).catch((err) => {
+            console.log(err);
+            return res.status(500).send({ status: "Internal Server Error" });
+        })
+    }
+    return res.status(400).send({ status: "Invalid Request" });
+
+});
+
+//router for search employee records
+router.get("/searchEmployees/:input", async (req, res) => {
+
+    const input = req.params.input;
+
+    if (req.query.type == "pastEmp") {
+        if (!isNaN(input)) {
+            try {
+                const response = await Resignation.find({ nic: { $regex: '.*' + input.trim() + '.*', $options: 'i' } });
+                console.log("search results", response);
+                return res.status(200).send({ status: "Success", data: response });
+            } catch (error) {
+                console.log("Something went wrong while connecting to DB");
+                return { ok: false };
+            }
+        }
+        try {
+            const response = await Resignation.find({ fName: { $regex: '.*' + input + '.*', $options: 'i' } });
+            console.log("search results", response);
+            return res.status(200).send({ status: "Success", data: response });
+        } catch (error) {
+            console.log("Something went wrong while connecting to DB");
+            return { ok: false };
+        }
+    }
+
+
+    if (!isNaN(input)) {
+        //     console.log
+        try {
+            const response = await Employee.find({ nic: { $regex: '.*' + input.trim() + '.*', $options: 'i' } });
+            console.log("search results", response);
+            return res.status(200).send({ status: "Success", data: response });
+        } catch (error) {
+            console.log("Something went wrong while connecting to DB");
+            return { ok: false };
+        }
+    }
+    try {
+        const response = await Employee.find({ fName: { $regex: '.*' + input + '.*', $options: 'i' } });
+        console.log("search results", response);
+        return res.status(200).send({ status: "Success", data: response });
+    } catch (error) {
+        console.log("Something went wrong while connecting to DB");
+        return { ok: false };
+    }
+
+});
+
 //router for add resignation
 router.post("/resignation", async (req, res) => {
 
@@ -131,7 +233,6 @@ router.post("/resignation", async (req, res) => {
         let response = await newResignation.save();
         console.log("doneeeeeeeee>>>>>>>>>>>>", response)
         if (response)
-            //console.log(doc);
             return res.status(201).send({ message: "newResignation Added" });
     } catch (err) {
         console.log("error while saving");
@@ -175,11 +276,23 @@ router.post("/inquiry", async (req, res) => {
             console.log(response);
         return res.status(201).send({ message: "new Inquiry Added" });
     } catch (err) {
-        //console.log("error while saving");
         return res.status(500).send({ status: "Internal Server Error" });
     }
 });
 
+//to search for the list of renting records on the current
+router.route("/EmployeeAvailable").get((req, res) => {
 
+
+    Employee.count().then((employee) => {
+        res.json(employee);
+
+    })
+        .catch((err) => {
+            console.log(err);
+
+    })
+
+})
 
 module.exports = router;

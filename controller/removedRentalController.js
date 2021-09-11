@@ -85,7 +85,7 @@ router.route("/generateReport/:rFrom/:rTo/:rvehicleType/:rCustomerName").get((re
     let rTo = moment(req.params.rTo.trim()).format('YYYY-MMMM-DD');
     let rvehicleType = req.params.rvehicleType;
     let rCustomerName = req.params.rCustomerName;
-    let status = "Completed";
+    let status = "completed";
 
     console.log("request", req.params);
 
