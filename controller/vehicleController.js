@@ -148,6 +148,58 @@ router.post("/deleteV", async (req, res) => {
 });
 
 
+//update vehicle
+router.route("/updateV/:id").put(async(req,res)=>{
+
+
+    let userId = req.params.id;
+    console.log(userId);
+    console.log("upt data", req.body);
+    const {  VehicleID, 
+        VehicleRegNo,
+        VehicleModel,
+        VehicleType,
+        VehicleBrand,
+        InsType,
+        InsComName,
+        Transmission,
+        AirC,
+        NoOfSeats,
+        RatePDay,
+        YearsRent} =req.body;
+
+    //const data = req.body;
+    //D structure
+    const updateVehicle ={
+         VehicleID, 
+         VehicleRegNo,
+         VehicleModel,
+         VehicleType,
+         VehicleBrand,
+         InsType,
+         InsComName,
+         Transmission,
+         AirC,
+         NoOfSeats,
+         RatePDay,
+         YearsRent
+    }
+
+    const update = await Vehicle.findOneAndUpdate({VehicleID:userId},updateVehicle).then(()=>{
+
+        res.status(200).send({status: "Vehicle Updated"})
+    }).catch((err)=>{
+        console.log(err);
+        res.status(500).send({status : "Errror with updating data"})
+    })
+
+    
+})
+
+
+
+
+
 
 
 
