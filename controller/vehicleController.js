@@ -222,5 +222,125 @@ router.route("/VehiclesAvailable").get((req, res) => {
 //To get the count of the pending records
 
 
+//searh records
+router.route("/searchV/:search").get(async(req,res)=>{
+    let val = req.params.search.trim();
+    let search = req.params.search;
+
+    if(!isNaN(search)){
+        if(search <11){
+
+            try{
+                const response = await Vehicle.find({YearsRent: { $regex:  val + '$', $options: 'i'}});
+                console.log("search results" ,response);
+                return res.status(200).send({status: "Success", data:response});
+            }catch (error) {
+    
+                console.log("something went wrong!!");
+                return{ok : flase};
+    
+            }
+    
+
+        }
+        try{
+            const response = await Vehicle.find({VehicleRegNo: { $regex: '.*' + val + '.*', $options: 'i'}});
+            console.log("search results" ,response);
+            return res.status(200).send({status: "Success", data:response});
+        }catch (error) {
+
+            console.log("something went wrong!!");
+            return{ok : flase};
+
+        }
+
+    }else if(isNaN(search)){
+        try{
+            const response = await Vehicle.find({VehicleRegNo: { $regex: '.*' + val + '.*', $options: 'i'}});
+
+            if(response.length>0){
+                console.log("search results" ,response);
+                 return res.status(200).send({status: "Success", data:response});
+        }
+            
+        }catch (error) {
+
+            console.log("something went wrong!!");
+            return{ok : flase};
+
+        }
+        
+    }
+
+    try{
+        const response = await Vehicle.find({VehicleType: { $regex: '.*' + val + '.*', $options: 'i'}});
+        if(response.length > 0){
+            return res.status(200).send({status: "Success", data:response});
+        }
+        else{
+            try{
+                const response = await Vehicle.find({VehicleModel: { $regex: '.*' + val + '.*', $options: 'i'}});
+                if(response.length > 0){
+                    return res.status(200).send({status: "Success", data:response});
+                }else{
+                    try{
+                        const response = await Vehicle.find({VehicleBrand: { $regex: '.*' + val + '.*', $options: 'i'}});
+                        return res.status(200).send({status: "Success", data:response});
+
+                    }catch(err){
+                        console.log("something went wrong!!");
+                        return{ok : flase};
+
+
+                    }
+                }
+
+            }catch(err){
+                console.log("something went wrong!!");
+                return{ok : flase};
+
+
+            }
+        }
+        
+    }catch (error) {
+
+        console.log("something went wrong!!");
+        return{ok : flase};
+
+    }
+
+
+    
+
+})
+
+
+//vehile report router
+
+router.route("/reportV/:dateFrom/:dateTo/:Type/:Brand/:years").get(async(req,res)=>{
+
+    const dateFrom = req.params.dateFrom;
+    const dateTo = req.params.dateTo;
+    const Type = req.params.Type;
+    const Brand = req.params.Brand;
+    const years = reqa.params.years;
+
+    try{
+        $and :[{
+
+            date: { $regex: "^" + dateFrom + ".*", $options: 'i' },
+
+            
+
+        }]
+
+
+    }catch(err){
+
+    }
+})
+
+
 
 module.exports = router;
