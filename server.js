@@ -20,7 +20,7 @@ mongoose.connect(URL, {
     useCreateIndex: true,
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindandModify: false
+    // useFindandModify: false
 });
 
 const connection = mongoose.connection;
@@ -53,3 +53,6 @@ app.use("/reservations", reservationController);
 
 const deletedReservationRouter = require("./controller/removedReservationController.js");
 app.use("/deletedReservations", deletedReservationRouter);
+
+const loginRouter = require("./controller/login.js");
+app.use("/login",loginRouter);
