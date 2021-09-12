@@ -302,8 +302,8 @@ router.route("/generateReport/:rFrom/:rTo/:rvehicleType/:rCustomerName").get((re
     if (rCustomerName == "null" && rvehicleType == "null") {
         Rental.find({
             $and: [{
-                from: { $regex: "^" + rFrom + ".*" },
-                to: { $regex: "^" + rTo + ".*" },
+                from: { $gte: rFrom },
+                to: { $lte: rTo },
                 status: { $regex: "^" + status + ".*" },
             }]
         })
@@ -316,8 +316,8 @@ router.route("/generateReport/:rFrom/:rTo/:rvehicleType/:rCustomerName").get((re
     } else if (rvehicleType == "null") {
         Rental.find({
             $and: [{
-                from: { $regex: "^" + rFrom + ".*" },
-                to: { $regex: "^" + rTo + ".*" },
+                from: { $gte: rFrom },
+                to: { $lte: rTo },
                 customerName: { $regex: ".*" + rCustomerName + ".*" },
                 status: { $regex: "^" + status + ".*" },
             }]
@@ -332,8 +332,8 @@ router.route("/generateReport/:rFrom/:rTo/:rvehicleType/:rCustomerName").get((re
     } else if (rCustomerName == "null") {
         Rental.find({
             $and: [{
-                from: { $regex: "^" + rFrom + ".*" },
-                to: { $regex: "^" + rTo + ".*" },
+                from: { $gte: rFrom },
+                to: { $lte: rTo },
                 vehicleType: { $regex: "^" + rvehicleType + ".*" },
                 status: { $regex: "^" + status + ".*" },
             }]
@@ -349,8 +349,8 @@ router.route("/generateReport/:rFrom/:rTo/:rvehicleType/:rCustomerName").get((re
 
         Rental.find({
             $and: [{
-                from: { $regex: "^" + rFrom + ".*" },
-                to: { $regex: "^" + rTo + ".*" },
+                from: { $gte: rFrom },
+                to: { $lte: rTo },
                 vehicleType: { $regex: "^" + rvehicleType + ".*" },
                 customerName: { $regex: ".*" + rCustomerName + ".*" },
                 status: { $regex: "^" + status + ".*" },
