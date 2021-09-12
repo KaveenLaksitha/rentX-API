@@ -316,5 +316,31 @@ router.route("/searchV/:search").get(async(req,res)=>{
 })
 
 
+//vehile report router
+
+router.route("/reportV/:dateFrom/:dateTo/:Type/:Brand/:years").get(async(req,res)=>{
+
+    const dateFrom = req.params.dateFrom;
+    const dateTo = req.params.dateTo;
+    const Type = req.params.Type;
+    const Brand = req.params.Brand;
+    const years = reqa.params.years;
+
+    try{
+        $and :[{
+
+            date: { $regex: "^" + dateFrom + ".*", $options: 'i' },
+
+            
+
+        }]
+
+
+    }catch(err){
+
+    }
+})
+
+
 
 module.exports = router;
