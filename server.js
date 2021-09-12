@@ -20,7 +20,7 @@ mongoose.connect(URL, {
     useCreateIndex: true,
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindandModify: false
+    // useFindandModify: false
 });
 
 const connection = mongoose.connection;
