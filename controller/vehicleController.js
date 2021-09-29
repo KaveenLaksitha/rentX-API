@@ -1,6 +1,7 @@
 const router = require("express").Router();
 let Vehicle = require("../model/vehicleModel");
 const { v4: uuidv4 } = require("uuid");
+const moment = require('moment');
 
 
 
@@ -16,7 +17,7 @@ router.route("/addVehicle").post((req, res) => {
     const TeleNo = req.body.TeleNo;
     const Address = req.body.Address;
     const Email = req.body.Email;
-    const Date = req.body.Date;
+    const Date = moment(req.body.Date).format('YYYY-MM-DD');
     const VehicleRegNo = req.body.VehicleRegNo;
     const VehicleModel = req.body.VehicleModel;
     const VehicleType = req.body.VehicleType;
@@ -320,25 +321,35 @@ router.route("/searchV/:search").get(async(req,res)=>{
 
 router.route("/reportV/:dateFrom/:dateTo/:Type/:Brand/:years").get(async(req,res)=>{
 
-    const dateFrom = req.params.dateFrom;
-    const dateTo = req.params.dateTo;
+    const dateFrom = moment(req.params.dateFrom.trim()).format('YYYY-MM-DD');
+    const dateTo = moment(req.params.dateTo.trim()).format('YYYY-MM-DD');
     const Type = req.params.Type;
     const Brand = req.params.Brand;
-    const years = reqa.params.years;
+    const years = req.params.years;
 
-    try{
+    console.log("report function",dateFrom,dateTo,Type,Brand,years);
+
+    
+
+        Vehicle.find({
         $and :[{
 
-            date: { $regex: "^" + dateFrom + ".*", $options: 'i' },
+            Date: { $gte: dateFrom , $lte: dateTo },
+            VehicleType: { $regex: '^' + Type + '.*', $options: 'i'},
+            VehicleBrand :{ $regex: '^' + Brand + '.*', $options: 'i'},
+            YearsRent: { $regex: '^' + years + '.*', $options: 'i'},
 
-            
 
         }]
 
+    }).then((vehicles)=>{
+            res.json(vehicles);
+    }).catch((err)=>{
+        console.log(err);
+    })
 
-    }catch(err){
 
-    }
+    
 })
 
 
