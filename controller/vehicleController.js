@@ -2,6 +2,8 @@ const router = require("express").Router();
 let Vehicle = require("../model/vehicleModel");
 const { v4: uuidv4 } = require("uuid");
 const moment = require('moment');
+const multer = require('multer')
+const upload = multer({ dest: 'uploads/' })
 
 
 
@@ -10,6 +12,8 @@ const moment = require('moment');
 //add vehicle
 
 router.route("/addVehicle").post((req, res) => {
+
+    console.log(" ballo file ", req.body)
 
     const VehicleID = uuidv4();
     const OwnerName = req.body.OwnerName;
@@ -30,7 +34,7 @@ router.route("/addVehicle").post((req, res) => {
     const NoOfSeats = req.body.NoOfSeats;
     const RatePDay = req.body.RatePDay;
     const YearsRent = req.body.YearsRent;
-    const vehPic = req.body.vehPic;
+    const vehPic = req.body.imgPath;
     const vehDoc = req.body.vehDoc;
 
     const newVehicle = new Vehicle({
@@ -108,6 +112,7 @@ router.route("/searchPerDayRentalPrice/:vehicle/:model").get((req, res) => {
 
 })
 
+//search vehicle details
 router.route("/searchVehicleModels/:vehicle").get((req, res) => {
 
     let val = req.params.vehicle.trim();
@@ -150,13 +155,13 @@ router.post("/deleteV", async (req, res) => {
 
 
 //update vehicle
-router.route("/updateV/:id").put(async(req,res)=>{
+router.route("/updateV/:id").put(async (req, res) => {
 
 
     let userId = req.params.id;
     console.log(userId);
     console.log("upt data", req.body);
-    const {  VehicleID, 
+    const { VehicleID,
         VehicleRegNo,
         VehicleModel,
         VehicleType,
@@ -167,34 +172,34 @@ router.route("/updateV/:id").put(async(req,res)=>{
         AirC,
         NoOfSeats,
         RatePDay,
-        YearsRent} =req.body;
+        YearsRent } = req.body;
 
     //const data = req.body;
     //D structure
-    const updateVehicle ={
-         VehicleID, 
-         VehicleRegNo,
-         VehicleModel,
-         VehicleType,
-         VehicleBrand,
-         InsType,
-         InsComName,
-         Transmission,
-         AirC,
-         NoOfSeats,
-         RatePDay,
-         YearsRent
+    const updateVehicle = {
+        VehicleID,
+        VehicleRegNo,
+        VehicleModel,
+        VehicleType,
+        VehicleBrand,
+        InsType,
+        InsComName,
+        Transmission,
+        AirC,
+        NoOfSeats,
+        RatePDay,
+        YearsRent
     }
 
-    const update = await Vehicle.findOneAndUpdate({VehicleID:userId},updateVehicle).then(()=>{
+    const update = await Vehicle.findOneAndUpdate({ VehicleID: userId }, updateVehicle).then(() => {
 
-        res.status(200).send({status: "Vehicle Updated"})
-    }).catch((err)=>{
+        res.status(200).send({ status: "Vehicle Updated" })
+    }).catch((err) => {
         console.log(err);
-        res.status(500).send({status : "Errror with updating data"})
+        res.status(500).send({ status: "Errror with updating data" })
     })
 
-    
+
 })
 
 
@@ -224,102 +229,102 @@ router.route("/VehiclesAvailable").get((req, res) => {
 
 
 //searh records
-router.route("/searchV/:search").get(async(req,res)=>{
+router.route("/searchV/:search").get(async (req, res) => {
     let val = req.params.search.trim();
     let search = req.params.search;
 
-    if(!isNaN(search)){
-        if(search <11){
+    if (!isNaN(search)) {
+        if (search < 11) {
 
-            try{
-                const response = await Vehicle.find({YearsRent: { $regex:  val + '$', $options: 'i'}});
-                console.log("search results" ,response);
-                return res.status(200).send({status: "Success", data:response});
-            }catch (error) {
-    
+            try {
+                const response = await Vehicle.find({ YearsRent: { $regex: val + '$', $options: 'i' } });
+                console.log("search results", response);
+                return res.status(200).send({ status: "Success", data: response });
+            } catch (error) {
+
                 console.log("something went wrong!!");
-                return{ok : flase};
-    
+                return { ok: flase };
+
             }
-    
+
 
         }
-        try{
-            const response = await Vehicle.find({VehicleRegNo: { $regex: '.*' + val + '.*', $options: 'i'}});
-            console.log("search results" ,response);
-            return res.status(200).send({status: "Success", data:response});
-        }catch (error) {
+        try {
+            const response = await Vehicle.find({ VehicleRegNo: { $regex: '.*' + val + '.*', $options: 'i' } });
+            console.log("search results", response);
+            return res.status(200).send({ status: "Success", data: response });
+        } catch (error) {
 
             console.log("something went wrong!!");
-            return{ok : flase};
+            return { ok: flase };
 
         }
 
-    }else if(isNaN(search)){
-        try{
-            const response = await Vehicle.find({VehicleRegNo: { $regex: '.*' + val + '.*', $options: 'i'}});
+    } else if (isNaN(search)) {
+        try {
+            const response = await Vehicle.find({ VehicleRegNo: { $regex: '.*' + val + '.*', $options: 'i' } });
 
-            if(response.length>0){
-                console.log("search results" ,response);
-                 return res.status(200).send({status: "Success", data:response});
-        }
-            
-        }catch (error) {
+            if (response.length > 0) {
+                console.log("search results", response);
+                return res.status(200).send({ status: "Success", data: response });
+            }
+
+        } catch (error) {
 
             console.log("something went wrong!!");
-            return{ok : flase};
+            return { ok: flase };
 
         }
-        
+
     }
 
-    try{
-        const response = await Vehicle.find({VehicleType: { $regex: '.*' + val + '.*', $options: 'i'}});
-        if(response.length > 0){
-            return res.status(200).send({status: "Success", data:response});
+    try {
+        const response = await Vehicle.find({ VehicleType: { $regex: '.*' + val + '.*', $options: 'i' } });
+        if (response.length > 0) {
+            return res.status(200).send({ status: "Success", data: response });
         }
-        else{
-            try{
-                const response = await Vehicle.find({VehicleModel: { $regex: '.*' + val + '.*', $options: 'i'}});
-                if(response.length > 0){
-                    return res.status(200).send({status: "Success", data:response});
-                }else{
-                    try{
-                        const response = await Vehicle.find({VehicleBrand: { $regex: '.*' + val + '.*', $options: 'i'}});
-                        return res.status(200).send({status: "Success", data:response});
+        else {
+            try {
+                const response = await Vehicle.find({ VehicleModel: { $regex: '.*' + val + '.*', $options: 'i' } });
+                if (response.length > 0) {
+                    return res.status(200).send({ status: "Success", data: response });
+                } else {
+                    try {
+                        const response = await Vehicle.find({ VehicleBrand: { $regex: '.*' + val + '.*', $options: 'i' } });
+                        return res.status(200).send({ status: "Success", data: response });
 
-                    }catch(err){
+                    } catch (err) {
                         console.log("something went wrong!!");
-                        return{ok : flase};
+                        return { ok: flase };
 
 
                     }
                 }
 
-            }catch(err){
+            } catch (err) {
                 console.log("something went wrong!!");
-                return{ok : flase};
+                return { ok: flase };
 
 
             }
         }
-        
-    }catch (error) {
+
+    } catch (error) {
 
         console.log("something went wrong!!");
-        return{ok : flase};
+        return { ok: flase };
 
     }
 
 
-    
+
 
 })
 
 
 //vehile report router
 
-router.route("/reportV/:dateFrom/:dateTo/:Type/:Brand/:years").get(async(req,res)=>{
+router.route("/reportV/:dateFrom/:dateTo/:Type/:Brand/:years").get(async (req, res) => {
 
     const dateFrom = moment(req.params.dateFrom.trim()).format('YYYY-MM-DD');
     const dateTo = moment(req.params.dateTo.trim()).format('YYYY-MM-DD');
@@ -327,29 +332,29 @@ router.route("/reportV/:dateFrom/:dateTo/:Type/:Brand/:years").get(async(req,res
     const Brand = req.params.Brand;
     const years = req.params.years;
 
-    console.log("report function",dateFrom,dateTo,Type,Brand,years);
+    console.log("report function", dateFrom, dateTo, Type, Brand, years);
 
-    
 
-        Vehicle.find({
-        $and :[{
 
-            Date: { $gte: dateFrom , $lte: dateTo },
-            VehicleType: { $regex: '^' + Type + '.*', $options: 'i'},
-            VehicleBrand :{ $regex: '^' + Brand + '.*', $options: 'i'},
-            YearsRent: { $regex: '^' + years + '.*', $options: 'i'},
+    Vehicle.find({
+        $and: [{
+
+            Date: { $gte: dateFrom, $lte: dateTo },
+            VehicleType: { $regex: '^' + Type + '.*', $options: 'i' },
+            VehicleBrand: { $regex: '^' + Brand + '.*', $options: 'i' },
+            YearsRent: { $regex: '^' + years + '.*', $options: 'i' },
 
 
         }]
 
-    }).then((vehicles)=>{
-            res.json(vehicles);
-    }).catch((err)=>{
+    }).then((vehicles) => {
+        res.json(vehicles);
+    }).catch((err) => {
         console.log(err);
     })
 
 
-    
+
 })
 
 
