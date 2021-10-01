@@ -21,8 +21,4 @@ router.route("/get/:un/:pass").get(async (req, res) => {
 })
 
 
-
-
-
-
 module.exports = router;
