@@ -5,7 +5,7 @@ const { Router } = require("express");
 const isMoment  = require("moment");
 
 
-//insert data
+//insert data for reservation
 controller.route("/addReservation").post((req,res)=>{
     const reservationid = uuidv4();
     const customername = req.body.customername;
@@ -47,7 +47,7 @@ controller.route("/addReservation").post((req,res)=>{
     })
 })
 
-//retrieve all order details
+//retrieve all reservation details
 controller.route("/displayReservation").get((req,res) =>{
     Reservation.find().then((reservation) => {
         res.json(reservation)
@@ -57,7 +57,7 @@ controller.route("/displayReservation").get((req,res) =>{
 })
 
 
-//To retrieve the reservation details of a specific order 
+//To retrieve the reservation details of a specific reservation id 
 controller.route("/getReservation/:RID").get(async(req,res) => {
 
     let RID = req.params.RID;
@@ -66,10 +66,10 @@ controller.route("/getReservation/:RID").get(async(req,res) => {
     .then((reservation) =>{
         if(reservation != null){
             res.status(200).send({status :"Reservation fetched", reservation:reservation})
-            //res.status(500).send({status : "Error with get Reservation", error:err.message});
+           
         }else{
             res.status(500).send({status : "Error with get Reservation", error:err.message});
-            //res.status(200).send({status :"Reservation fetched", reservation:reservation})
+           
         }       
     }).catch((err) => {
         console.log(err.message);
@@ -82,8 +82,6 @@ controller.route("/getReservation/:RID").get(async(req,res) => {
 controller.route("/deleteReservation").post(async(req,res)=>{
     let RID = req.body.reservationid; //Reservation ID taken from frontend
 
-    //console.log("reservation id", RID)
-
     await Reservation.findOneAndDelete({reservationid : RID})
     .then(()=> {
             res.status(200).send({ status: "Reservation Record deleted" });
@@ -94,13 +92,10 @@ controller.route("/deleteReservation").post(async(req,res)=>{
 })
 
 //to update the reservation details
-
 controller.route("/updateReservation/:RID").put(async(req,res) => {
-    //console.log(req.body);
+ 
     let RID = req.params.RID;
-
-    //const penaltyDay = req.body.penaltyDay;
-    
+  
     //we have to fetch the new updating details coming from the front end here-new feature called d structure
 
     const {
@@ -145,7 +140,7 @@ controller.route("/updateReservation/:RID").put(async(req,res) => {
         returnDay
     }//create a object containing the data that needs to be updated
 
-       //we have to pass the primary key and then value to be passed
+ //we have to pass the primary key and then value to be passed
     const updateReserve = await Reservation.findOneAndUpdate({reservationid:RID},updateReservation)
     .then(() => {
         res.status(200).send({ status: "Reservation Record updated" })//sending details of the updated data back to front end
@@ -155,12 +150,11 @@ controller.route("/updateReservation/:RID").put(async(req,res) => {
     })
 })
 
-//this route is used to find the latest three rentals
+//this route is used to find the latest three reservation to display on dashboard
 controller.route("/getLatestReservationOnly").get(async (req, res) => {
 
     const reservation = await Reservation.find().sort({ _id: -1 }).limit(3)
         .then((reservation) => {
-            //res.status(200).send({ status: "Rental fetched", rental: rental })
             res.json(reservation);
         }).catch(() => {
             console.log(err.message);
@@ -169,7 +163,7 @@ controller.route("/getLatestReservationOnly").get(async (req, res) => {
 
 })
 
-//To get the count of the pending records
+//To get the count of the pending reservation records
 controller.route("/pendingReservationCount").get((req, res) => {
 
     Reservation.find({ status: /pending/ }).count().then((result) => {
@@ -181,12 +175,11 @@ controller.route("/pendingReservationCount").get((req, res) => {
 
 })
 
-//this will serach for the list of orders by a particular customer nic given at searchbox
+//search by customer nic given on search box
 controller.route("/searchReservationRecs/:customernic").get((req, res) => {
 
     let val = req.params.customernic.trim();
 
-    //{$regex: "^" + val + ".*"}this will get to the value starting at the begining of list 
     Reservation.find({ customernic: { $regex: "^" + val + ".*", $options: 'i' } }).then((reservation) => {
         res.json(reservation);
 
@@ -195,16 +188,14 @@ controller.route("/searchReservationRecs/:customernic").get((req, res) => {
             console.log(err);
 
         })
-
 })
 
-//to search for an rental record based on status
+//to search for an reservation record based on package name
 controller.route("/searchReservationRecordsX/:rVal").get((req, res) => {
 
     let val = req.params.rVal.trim();
 
-    //{$regex: ".*" + val + ".*"}this will get to the value anywhere in the list not just begining
-    Reservation.find({ status: { $regex: ".*" + val + ".*", $options: 'i' } }).then((reservation) => {
+    Reservation.find({ packagename: { $regex: ".*" + val + ".*", $options: 'i' } }).then((reservation) => {
         res.json(reservation)
 
     }).catch((err) => {
@@ -214,12 +205,11 @@ controller.route("/searchReservationRecordsX/:rVal").get((req, res) => {
 })
 
 
-//to search only pending rental record 
-controller.route("/searchPendingReservationRecords").get((req, res) => {
+//seach completed rental records to delete from lest
+controller.route("/searchCompletedReservationRecords").get((req, res) => {
 
     let val = "completed";
 
-    //{$regex: ".*" + val + ".*"}this will get to the value anywhere in the list not just begining
     Reservation.find({ status: { $regex: ".*" + val + ".*", $options: 'i' } }).then((reservation) => {
         res.json(reservation)
 
@@ -229,7 +219,7 @@ controller.route("/searchPendingReservationRecords").get((req, res) => {
 
 })
 
-//to search for the list of renting records on the current
+//to search for the list of reservation records on the current
 controller.route("/VehiclesReservationToday").get((req, res) => {
 
     let val = isMoment().format('YYYY-MMMM-DD');
@@ -244,5 +234,84 @@ controller.route("/VehiclesReservationToday").get((req, res) => {
             console.log(err);
         })
 })
+
+/******functions to be used within the report handling*******/
+controller.route("/generateReport/:rFrom/:rTo/:rPackageType/:rEventType").get((req, res) => {
+
+    let rFrom = isMoment(req.params.rFrom.trim()).format('YYYY-MMMM-DD');
+    let rTo = isMoment(req.params.rTo.trim()).format('YYYY-MMMM-DD');
+    let rPackageType = req.params.rPackageType;
+    let rEventType = req.params.rEventType;
+    let status = "Pending";
+
+    console.log("resuest", req.params);
+    console.log("dates", rFrom)
+
+    if (rPackageType == "null" && rEventType == "null") {
+        Reservation.find({
+            $and: [{
+                from: { $gte: rFrom },
+                to: { $lte: rTo },
+                status: { $regex: "^" + status + ".*" },
+            }]
+        })
+            .then((reservation) => {
+                res.json(reservation);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    } else if (rPackageType == "null") {
+        Reservation.find({
+            $and: [{
+                from: { $gte: rFrom },
+                to: { $lte: rTo },
+                eventtype: { $regex: ".*" + rEventType + ".*" },
+                status: { $regex: "^" + status + ".*" },
+            }]
+        })
+            .then((reservation) => {
+                res.json(reservation);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+
+    } else if (rEventType == "null") {
+        Reservation.find({
+            $and: [{
+                from: { $gte: rFrom },
+                to: { $lte: rTo },
+                packagename: { $regex: "^" + rPackageType + ".*" },
+                status: { $regex: "^" + status + ".*" },
+            }]
+        })
+            .then((reservation) => {
+                res.json(reservation);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+    else {
+
+        Reservation.find({
+            $and: [{
+                from: { $gte: rFrom },
+                to: { $lte: rTo },
+                packagename: { $regex: "^" + rPackageType + ".*" },
+                eventtype: { $regex: ".*" + rEventType + ".*" },
+                status: { $regex: "^" + status + ".*" },
+            }]
+        })
+            .then((reservation) => {
+                res.json(reservation);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+})
+
 
 module.exports = controller;
