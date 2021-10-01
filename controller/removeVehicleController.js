@@ -54,7 +54,7 @@ router.route("/addRemoveVehicle").post((req, res) => {
         res.json("Vehicle added");
 
     }).catch((err) => {
-        console.log(err);
+        console.log("removed vehicle err",err);
     })
 
 })
@@ -66,7 +66,7 @@ router.route("/viewRemove").get((req, res) => {
         //send data as json object
         res.json(Vehicles)
     }).catch((err) => {
-        console.log(err)
+        console.log("ghfgghgvhkgfvchgd",err)
     })
 })
 

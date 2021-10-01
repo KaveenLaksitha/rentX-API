@@ -3,9 +3,8 @@ const isMoment = require('moment');
 let RemovedReservation = require("../model/RemovedReservationModel");
 
 
-//insert data
+//insert data ro completed reservation record
 controller.route("/addRemovedReservation").post((req,res)=>{
-    //console.log("hi",req.body.data);
     const reservationid =  req.body.data.reservationid;
     const customername = req.body.data.customername;
     const contactnumber = Number(req.body.data.contactnumber);
@@ -43,7 +42,6 @@ controller.route("/addRemovedReservation").post((req,res)=>{
 
     })
 
-    //console.log("dataaaaaaaaa",newRemovedReservationRecords)
 
     newRemovedReservationRecords.save().then(()=>{
         console.log("data saved")
@@ -55,7 +53,7 @@ controller.route("/addRemovedReservation").post((req,res)=>{
     })
 })
 
-//retrieve all order details
+//retrieve all reservation details
 controller.route("/displayRemovedReservation").get((req,res) =>{
     RemovedReservation.find().then((removedReservation) => {
         res.json(removedReservation)
@@ -64,6 +62,7 @@ controller.route("/displayRemovedReservation").get((req,res) =>{
     })
 })
 
+//find today completed reservation based on past record list
 controller.route("/VehiclesReservationToday").get((req, res) => {
 
     let val = isMoment().format('YYYY-MMMM-DD');
@@ -77,6 +76,84 @@ controller.route("/VehiclesReservationToday").get((req, res) => {
 
         })
 
+})
+
+/******functions to be used within the report handling*******/
+controller.route("/generateReport/:rFrom/:rTo/:rPackageType/:rEventType").get((req, res) => {
+
+    let rFrom = isMoment(req.params.rFrom.trim()).format('YYYY-MMMM-DD');
+    let rTo = isMoment(req.params.rTo.trim()).format('YYYY-MMMM-DD');
+    let rPackageType = req.params.rPackageType;
+    let rEventType = req.params.rEventType;
+    let status = "Completed";
+
+    console.log("resuest", req.params);
+    console.log("dates", rFrom)
+
+    if (rPackageType == "null" && rEventType == "null") {
+        RemovedReservation.find({
+            $and: [{
+                from: { $gte: rFrom },
+                to: { $lte: rTo },
+                status: { $regex: "^" + status + ".*" },
+            }]
+        })
+            .then((reservation) => {
+                res.json(reservation);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    } else if (rPackageType == "null") {
+        RemovedReservation.find({
+            $and: [{
+                from: { $gte: rFrom },
+                to: { $lte: rTo },
+                eventtype: { $regex: ".*" + rEventType + ".*" },
+                status: { $regex: "^" + status + ".*" },
+            }]
+        })
+            .then((reservation) => {
+                res.json(reservation);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+
+    } else if (rEventType == "null") {
+        RemovedReservation.find({
+            $and: [{
+                from: { $gte: rFrom },
+                to: { $lte: rTo },
+                packagename: { $regex: "^" + rPackageType + ".*" },
+                status: { $regex: "^" + status + ".*" },
+            }]
+        })
+            .then((reservation) => {
+                res.json(reservation);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+    else {
+
+        RemovedReservation.find({
+            $and: [{
+                from: { $gte: rFrom },
+                to: { $lte: rTo },
+                packagename: { $regex: "^" + rPackageType + ".*" },
+                eventtype: { $regex: ".*" + rEventType + ".*" },
+                status: { $regex: "^" + status + ".*" },
+            }]
+        })
+            .then((reservation) => {
+                res.json(reservation);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
 })
 
 

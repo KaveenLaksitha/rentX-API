@@ -5,121 +5,122 @@ const Schema = mongoose.Schema;
 const vehicleSchema = new Schema({
 
 
-    OwnerName : {
-        type : String,
-        
+    OwnerName: {
+        type: String,
+
     },
 
-    OwnerNIC : {
-        type : String,
-        
+    OwnerNIC: {
+        type: String,
+
     },
 
-    TeleNo : {
-        type : Number,
-        
+    TeleNo: {
+        type: Number,
+
     },
 
-    Address : {
-        type : String,
-        
-    },
+    Address: {
+        type: String,
 
-    
-
-    Email : {
-        type : String,
-        
-    },
-
-    
-
-    Date :{
-        type : String,
-       
     },
 
 
 
-    VehicleID : {
-        type : String,
-        
-    },
+    Email: {
+        type: String,
 
-    VehicleRegNo : {
-        type : String,
-        
-        unique : true
     },
 
 
 
-    VehicleModel :{
-        type : String,
-        
+    Date: {
+        type: String,
+
     },
 
-    VehicleType :{
-        type : String,
-        
+
+
+    VehicleID: {
+        type: String,
+
     },
 
-    VehicleBrand :{
-        type : String,
-        
+    VehicleRegNo: {
+        type: String,
+
+        unique: true
     },
 
-    Mileage : {
-        type : Number,
-        
+
+
+    VehicleModel: {
+        type: String,
+
     },
 
-    
-    InsType :{
-        type : String,
-        
+    VehicleType: {
+        type: String,
+
     },
 
-    InsComName :{
-        type : String,
-        
+    VehicleBrand: {
+        type: String,
+
     },
 
-    Transmission :{
-        type : String,
-        
+    Mileage: {
+        type: Number,
+
     },
 
-    
 
-    AirC :{
-        type : String,
-        
+    InsType: {
+        type: String,
+
     },
 
-    NoOfSeats :{
-        type : String,
-        
+    InsComName: {
+        type: String,
+
     },
 
-    RatePDay :{
-        type : Number,
-        
+    Transmission: {
+        type: String,
+
     },
 
-    YearsRent :{
-        type : String,
-        
+
+
+    AirC: {
+        type: String,
+
     },
 
-    vehPic :{
-        type : String,
-        
+    NoOfSeats: {
+        type: String,
+
     },
 
-   vehDoc :{
-        type : String,
-        
+    RatePDay: {
+        type: Number,
+
+    },
+
+    YearsRent: {
+        type: String,
+
+    },
+
+    vehPic: {
+
+        type: String,
+
+    },
+
+    vehDoc: {
+        type: String,
+
     },
 
 
@@ -132,12 +133,12 @@ const vehicleSchema = new Schema({
 // vehicleSchema.path('RatePDay').get(function(num) {
 //     return (num / 100).toFixed(2);
 //   });
-  
+
 //   // Setter
 //   vehicleSchema.path('RatePDay').set(function(num) {
 //     return ((num * 100)/100).toFixed(2);
 //   });
 
-const vehicle = mongoose.model("vehicle",vehicleSchema);
+const vehicle = mongoose.model("vehicle", vehicleSchema);
 
 module.exports = vehicle;

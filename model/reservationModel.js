@@ -18,7 +18,6 @@ const reservationSchema = new Schema({
 
     contactnumber : {
         type : Number,
-        required : true,
         maxlength : 10 ,
         minlength : 10
     },
