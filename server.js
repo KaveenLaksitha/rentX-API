@@ -3,7 +3,30 @@ const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+
+
+const Grid = require("gridfs-stream");
+
 require("dotenv").config();
+
+//image uploading
+
+var fs = require('fs');
+var path = require('path');
+
+
+
+app.use(express.urlencoded({ extended: false }))
+app.use(express.json())
+
+// Set EJS as templating engine
+app.set("view engine", "ejs");
+
+
+
+let gfs;
+
+//end
 
 const empRoutes = require("./controller/employeeController");
 
@@ -26,7 +49,21 @@ mongoose.connect(URL, {
 const connection = mongoose.connection;
 connection.once("open", () => {
     console.log("Mongodb Connection success!");
+    gfs = Grid(connection.db, mongoose.mongo);
+    gfs.collection("photos");
 })
+
+
+app.get("/file/:filename", async (req, res) => {
+    console.log("get file ");
+    try {
+        const file = await gfs.files.findOne({ filename: req.params.filename });
+        const readStream = gfs.createReadStream(file.filename);
+        readStream.pipe(res);
+    } catch (error) {
+        res.send("not found");
+    }
+});
 
 //Vehicle_Routes
 const vehicleRouter = require("./controller/vehicleController.js");
@@ -55,4 +92,8 @@ const deletedReservationRouter = require("./controller/removedReservationControl
 app.use("/deletedReservations", deletedReservationRouter);
 
 const loginRouter = require("./controller/login.js");
-app.use("/login",loginRouter);
+app.use("/login", loginRouter);
+
+const uploadRouter = require("./controller/uploadController.js");
+app.use("/upload", uploadRouter);
+

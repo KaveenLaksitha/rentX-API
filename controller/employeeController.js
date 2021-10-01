@@ -303,8 +303,10 @@ router.get("/employeeReport/:designation/:ageFrom/:ageTo/:gender", async (req, r
         );
         if (response.length == 0) {
             throw new Error;
+        } else {
+            console.log("data from searchh", response);
+            return res.status(200).send({ ok: true, data: response });
         }
-        return res.status(200).send({ status: "Success", data: response });
     } catch (error) {
         console.log(error);
         return res.status(500).send({ ok: false });
