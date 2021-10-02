@@ -2,7 +2,6 @@ const router = require("express").Router();
 const Employee = require("../model/employeeModel")
 const Resignation = require("../model/resignationModel");
 const { v4: uuidv4 } = require("uuid");
-const moment = require('moment');
 
 
 //router for add an employee
@@ -85,13 +84,13 @@ router.get("/employee", async (req, res) => {
 router.post("/removeEmployee", async (req, res) => {
     const employeeId = req.body.empId;
 
-    console.log(employeeId, "<<<<<<<<<<<<<<<<deleteeeeeeee");
+    // console.log(employeeId, "<<<<<<<<<<<<<<<<deleteeeeeeee");
 
     if (employeeId) {
         const response = await Employee.findOneAndDelete({ empId: employeeId }).then(() => {
             return res.status(200).send({ status: "Success" });
         }).catch((err) => {
-            console.log(err);
+            // console.log(err);
             return res.status(500).send({ status: "Internal Server Error" });
         })
     }
@@ -102,8 +101,8 @@ router.post("/removeEmployee", async (req, res) => {
 //router for update an employee record
 router.put("/updateEmployee/:empId", async (req, res) => {
     const empId = req.params.empId;
-    console.log("employee idd", empId);
-    console.log("payload cameeee", req.body);
+    // console.log("employee idd", empId);
+    // console.log("payload cameeee", req.body);
 
     const {
         fName,
@@ -143,7 +142,7 @@ router.put("/updateEmployee/:empId", async (req, res) => {
         const response = await Employee.findOneAndUpdate({ empId: empId }, employeePayload).then(() => {
             return res.status(200).send({ status: "Employee Successfully updated!" });
         }).catch((err) => {
-            console.log(err);
+            // console.log(err);
             return res.status(500).send({ status: "Internal Server Error" });
         })
     }
@@ -160,16 +159,16 @@ router.get("/searchEmployees/:input", async (req, res) => {
         if (!isNaN(input)) {
             try {
                 const response = await Resignation.find({ nic: { $regex: '.*' + input.trim() + '.*', $options: 'i' } });
-                console.log("search results", response);
+                // console.log("search results", response);
                 return res.status(200).send({ status: "Success", data: response });
             } catch (error) {
-                console.log("Something went wrong while connecting to DB");
+                // console.log("Something went wrong while connecting to DB");
                 return { ok: false };
             }
         }
         try {
             const response = await Resignation.find({ fName: { $regex: '.*' + input + '.*', $options: 'i' } });
-            console.log("search results", response);
+            // console.log("search results", response);
             return res.status(200).send({ status: "Success", data: response });
         } catch (error) {
             console.log("Something went wrong while connecting to DB");
@@ -182,16 +181,16 @@ router.get("/searchEmployees/:input", async (req, res) => {
         //     console.log
         try {
             const response = await Employee.find({ nic: { $regex: '.*' + input.trim() + '.*', $options: 'i' } });
-            console.log("search results", response);
+            // console.log("search results", response);
             return res.status(200).send({ status: "Success", data: response });
         } catch (error) {
-            console.log("Something went wrong while connecting to DB");
+            // console.log("Something went wrong while connecting to DB");
             return { ok: false };
         }
     }
     try {
         const response = await Employee.find({ fName: { $regex: '.*' + input + '.*', $options: 'i' } });
-        console.log("search results", response);
+        // console.log("search results", response);
         return res.status(200).send({ status: "Success", data: response });
     } catch (error) {
         console.log("Something went wrong while connecting to DB");
@@ -228,15 +227,15 @@ router.post("/resignation", async (req, res) => {
         resReason
     })
 
-    console.log(req.body.reason, "<<<<<<<<<<<<<<<< resignationnn");
+    // console.log(req.body.reason, "<<<<<<<<<<<<<<<< resignationnn");
 
     try {
         let response = await newResignation.save();
-        console.log("doneeeeeeeee>>>>>>>>>>>>", response)
+        // console.log("doneeeeeeeee>>>>>>>>>>>>", response)
         if (response)
             return res.status(201).send({ message: "newResignation Added" });
     } catch (err) {
-        console.log("error while saving");
+        // console.log("error while saving");
         return res.status(500).send({ status: "Internal Server Error" });
     }
     return res.status(400).send({ status: "Invalid Request" });
@@ -257,7 +256,6 @@ router.get("/pastEmployees", async (req, res) => {
 
 //to search for the list of renting records on the current
 router.route("/EmployeeAvailable").get((req, res) => {
-
 
     Employee.count().then((employee) => {
         res.json(employee);
@@ -284,8 +282,8 @@ router.get("/employeeReport/:designation/:ageFrom/:ageTo/:gender", async (req, r
     function calculate_age(age) {
         const dayMilliSeconds = age * 365 * 3600 * 24 * 1000;
         var dob = Date.now() - dayMilliSeconds;
-        console.log("epoch time", dob)
-        console.log(new Date(dob))
+        // console.log("epoch time", dob)
+        // console.log(new Date(dob))
         return dob;
     }
 
@@ -304,7 +302,7 @@ router.get("/employeeReport/:designation/:ageFrom/:ageTo/:gender", async (req, r
         if (response.length == 0) {
             throw new Error;
         } else {
-            console.log("data from searchh", response);
+            // console.log("data from searchh", response);
             return res.status(200).send({ ok: true, data: response });
         }
     } catch (error) {
