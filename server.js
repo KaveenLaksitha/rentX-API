@@ -30,7 +30,7 @@ let gfs;
 
 const empRoutes = require("./controller/employeeController");
 
-const port = 4000;
+const port = process.env.PORT || 4000;
 
 const URL = process.env.MONGODB_URL;
 
