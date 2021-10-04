@@ -9,7 +9,7 @@ router.post("/uploadImage", upload.single("file"), async (req, res) => {
     console.log("function call weyan", req.file)
 
     if (req.file === undefined) return res.send("you must select a file.");
-    const imgUrl = `http://localhost:4000/file/${req.file.filename}`;
+    const imgUrl = `https://rent-x-api.herokuapp.com/file/${req.file.filename}`;
     return res.send(imgUrl);
 });
 
