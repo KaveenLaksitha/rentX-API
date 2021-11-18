@@ -349,6 +349,7 @@ router.route("/reportV/:dateFrom/:dateTo/:Type/:Brand/:years").get(async (req, r
 
     }).then((vehicles) => {
         res.json(vehicles);
+        console.log("report dataaaaaaa", vehicles);
     }).catch((err) => {
         console.log(err);
     })
